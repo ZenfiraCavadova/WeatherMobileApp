@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/home_nav_graph"
+        android:icon="@drawable/ic_search"
+        android:title="Home"
+        app:destination="@+id/home_nav_graph"
+        />
+    <item
+        android:id="@+id/add_nav_graph"
+        android:icon="@drawable/ic_search"
+        android:title="Add"
+        app:destination="@+id/add_nav_graph"
+        />
+    <item
+        android:id="@+id/settings_nav_graph"
+        android:icon="@drawable/ic_search"
+        android:title="Settings"
+        app:destination="@+id/settings_nav_graph"
+        />
+</menu>

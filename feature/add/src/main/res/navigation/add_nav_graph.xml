@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_nav_graph"
+    app:startDestination="@id/addAndRemoveFragment">
+
+    <fragment
+        android:id="@+id/addAndRemoveFragment"
+        android:name="com.zenfira_cavadova.add.AddAndRemoveFragment"
+        android:label="fragment_add_and_remove"
+        tools:layout="@layout/fragment_add_and_remove" />
+</navigation>
