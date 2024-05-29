@@ -11,6 +11,6 @@ interface WeatherService {
         @Query("q")
         cityName: String,
         @Query("cnt") count: Int,
-        @Query("appid") apiKey: String
+        @Query("appid") apiKey: String =NetworkManager.API_KEY
     ): GetAllWeatherResponseModels
 }

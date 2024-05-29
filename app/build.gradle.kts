@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":feature:home"))
     implementation(project(":feature:add"))
     implementation(project(":feature:settings"))
+    implementation(project(":feature:search"))
     val navigationVersion = "2.5.3"
 
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")

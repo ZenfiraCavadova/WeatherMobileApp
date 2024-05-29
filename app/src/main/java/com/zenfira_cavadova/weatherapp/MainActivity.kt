@@ -47,12 +47,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.home_nav_graph -> {
                     toolbar.findViewById<TextView>(R.id.toolbar_title)?.text = "Notes"
                     toolbar.findViewById<TextView>(R.id.toolbar_subtitle)?.text = "22 December, 2021"
-                    binding.navigationIcon.visibility = View.VISIBLE
+                    binding.searchIcon.visibility = View.VISIBLE
                 }
                 R.id.add_nav_graph -> {
                     toolbar.findViewById<TextView>(R.id.toolbar_title)?.text = ""
                     toolbar.findViewById<TextView>(R.id.toolbar_subtitle)?.text = ""
-                    binding.navigationIcon.visibility = View.GONE
+                    binding.searchIcon.visibility = View.VISIBLE
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     toolbar.setNavigationOnClickListener {
                         onBackPressedDispatcher.onBackPressed()
@@ -61,8 +61,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.settings_nav_graph -> {
                     toolbar.findViewById<TextView>(R.id.toolbar_title)?.text = "Notes"
                     toolbar.findViewById<TextView>(R.id.toolbar_subtitle)?.text = ""
-                    binding.navigationIcon.visibility = View.VISIBLE
+                    binding.searchIcon.visibility = View.GONE
                 }
+            }
+            binding.searchIcon.setOnClickListener {
+                navController.navigate(com.zenfira_cavadova.search.R.id.search_nav_graph)
             }
         }
     }

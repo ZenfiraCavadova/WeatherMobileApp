@@ -8,9 +8,9 @@ import java.util.concurrent.TimeUnit
 object NetworkManager {
     var retrofit: Retrofit
 
-    private const val API_KEY = ""
-    private const val BASE_URL =
-        "api.openweathermap.org/data/2.5/forecast/daily?q={city name}&cnt={cnt}&appid={API key}"
+    const val API_KEY = "e469b79d53ebcaf1ec4a6d2f1223eb7f"
+    private const val BASE_URL ="https://api.openweathermap.org/data/2.5/"
+//        "api.openweathermap.org/data/2.5/forecast/daily?q={city name}&cnt={cnt}&appid=${API_KEY}"
     private const val TIMEOUT = 30L
 
     init {
