@@ -3,6 +3,7 @@ package com.zenfira_cavadova.search
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zenfira_cavadova.core.BaseViewModel
 import com.zenfira_cavadova.data.api.NetworkManager
 import com.zenfira_cavadova.data.repositories.WeatherRepositoryImpl
 import com.zenfira_cavadova.domain.entities.WeatherItem
@@ -12,7 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class SearchViewModel(): ViewModel() {
+class SearchViewModel(): BaseViewModel<SearchState,SearchEffect,SearchEvent>() {
     private val weatherRepository = WeatherRepositoryImpl()
     private val _weatherData = MutableStateFlow<GetAllWeatherResponseModels?>(null)
     val weatherData: StateFlow<GetAllWeatherResponseModels?> get() = _weatherData
@@ -20,9 +21,9 @@ class SearchViewModel(): ViewModel() {
     fun fetchWeather(city: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d("API Request", "Requesting weather for: $city with API key: ${NetworkManager.API_KEY}")
+                Log.e("API Request", "Requesting weather for: $city with API key: ${NetworkManager.API_KEY}")
                 val weatherResponse = NetworkManager.getWeatherServiceInstance().getWeatherForecast(
-                    city, 7,
+                    city,
                     NetworkManager.API_KEY
                 )
                 _weatherData.value = weatherResponse
@@ -51,15 +52,20 @@ class SearchViewModel(): ViewModel() {
             val weatherItems = weatherRepository.getAllWeatherItems()
             weatherItemsFLow.value=weatherItems.map {responseModel ->
                 WeatherItem(
-                    temperature = responseModel.temperature,
-                    highAndLowTemp = responseModel.highAndLowTemp,
-                    location = responseModel.location,
-                    weatherIcon = responseModel.weatherIcon,
-                    weatherDescription = responseModel.weatherDescription
+                    temperature = responseModel.temperature ?: "0.0",
+                    highAndLowTemp = responseModel.highAndLowTemp ?: "",
+                    location = responseModel.location ?: "",
+                    weatherIcon = responseModel.weatherIcon ?: 0,
+                    weatherDescription = responseModel.weatherDescription ?: "",
+                    windSpeed = responseModel.windSpeed ?: ""
                 )
             }
         }
         return weatherItemsFLow
+    }
+
+    override fun getInitialState(): SearchState {
+        return SearchState(isLoading = false)
     }
 }
 

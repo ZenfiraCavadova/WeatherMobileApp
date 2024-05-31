@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -41,6 +42,7 @@ dependencies {
 
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(project(":core"))
 //    implementation(project(":feature:home"))
 //    implementation(project(":feature:settings"))
 
@@ -61,6 +63,10 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:$roomVersion")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-config:21.0.2")
 
 
 }

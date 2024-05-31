@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings">AYARLAR</string>
+    <string name="units">VAHIDLƏR</string>
+    <string name="temprature_units">Temperatur vahidləri</string>
+    <string name="wind_speed_units">Külək sürəti vahidləri</string>
+    <string name="language">Dil</string>
+    <string name="other_settings">DİGƏR AYARLAR</string>
+    <string name="update_weather">Gecə hava məlumatlarını avtomatik yenilə</string>
+    <string name="update_weather_info">23:00-dan 07:00-a qədər hava məlumatlarını yenilə</string>
+</resources>

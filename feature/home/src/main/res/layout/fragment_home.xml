@@ -5,13 +5,30 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
+    android:orientation="vertical"
     android:id="@+id/homeFragment"
     tools:context=".HomeFragment">
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_inp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="44dp"
+        android:alpha="0.6"
+        android:background="@drawable/rounded_edittext"
+        android:queryHint="Search"
+        android:iconifiedByDefault="false"
+        android:ems="10"
+        android:inputType="text"
+        android:textColor="@color/dark_grey"
+        android:textColorHint="@color/dark_grey"
+        android:textSize="20sp"
+        android:gravity="center_vertical"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/weather_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_margin="20dp"
         tools:listitem="@layout/weather_container"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>

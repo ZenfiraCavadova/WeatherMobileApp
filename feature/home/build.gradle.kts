@@ -41,6 +41,7 @@ dependencies {
 
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(project(":core"))
 //    implementation(project(":feature:add"))
 //    implementation(project(":feature:settings"))
 

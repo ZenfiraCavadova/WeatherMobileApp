@@ -5,12 +5,11 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface WeatherService {
-
-    @GET("forecast/daily")
+    @GET("weather")
     suspend fun getWeatherForecast(
         @Query("q")
         cityName: String,
-        @Query("cnt") count: Int,
-        @Query("appid") apiKey: String =NetworkManager.API_KEY
+        @Query("appid")
+        apiKey: String =NetworkManager.API_KEY
     ): GetAllWeatherResponseModels
 }

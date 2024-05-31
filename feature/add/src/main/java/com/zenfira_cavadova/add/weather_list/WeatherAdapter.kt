@@ -1,5 +1,6 @@
 package com.zenfira_cavadova.add.weather_list
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -16,12 +17,15 @@ class WeatherAdapter:ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
         val item=getItem(position)
+        Log.e("WeatherAdapter", "onBindViewHolder called with item: $item")
+        Log.e("WeatherAdapter", "onBindViewHolder called for position: $position with item: $item")
         holder.bindData(item)
     }
     inner class WeatherViewHolder(private val  binding: WeatherContainerBinding): RecyclerView.ViewHolder(binding.root){
         fun bindData(item: WeatherItem){
-            binding.temperature.text = item.temperature
-            binding.highLowTemp.text = item.highAndLowTemp
+            Log.e("WeatherAdapter", "Binding data for location: ${item.location}")
+            binding.temperature.text = "${item.temperature}°"
+            binding.highLowTemp.text = "H:${item.highAndLowTemp.split(' ')[0]} L:${item.highAndLowTemp.split(' ')[1]}"
             binding.location.text = item.location
             binding.weatherIcon.setImageResource(item.weatherIcon)
             binding.weatherDescription.text = item.weatherDescription

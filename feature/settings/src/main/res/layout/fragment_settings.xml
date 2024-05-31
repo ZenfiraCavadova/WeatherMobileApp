@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"
         android:textColor="@color/dark_grey"
         android:textSize="32sp"
-        android:text="Settings"
+        android:text="@string/settings"
         android:layout_marginBottom="32dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/grey"
         android:textSize="16sp"
-        android:text="UNITS"
+        android:text="@string/units"
         android:layout_marginBottom="32dp"/>
 
     <LinearLayout
@@ -33,18 +33,12 @@
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:text="Temprature units"
+            android:text="@string/temprature_units"
             android:layout_marginBottom="32dp"/>
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textColor="@color/grey"-->
-<!--            android:textSize="16sp"-->
-<!--            android:text="C"/>-->
         <Spinner
             android:id="@+id/temp_spinner"
             android:layout_width="wrap_content"
@@ -62,18 +56,12 @@
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:text="Wind speed units"
+            android:text="@string/wind_speed_units"
             android:layout_marginBottom="32dp"/>
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textColor="@color/grey"-->
-<!--            android:textSize="16sp"-->
-<!--            android:text="Kilometers per hour\n (km/h)"/>-->
         <Spinner
             android:id="@+id/wind_spinner"
             android:layout_width="wrap_content"
@@ -92,18 +80,12 @@
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:text="Language"
+            android:text="@string/language"
             android:layout_marginBottom="32dp"/>
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textColor="@color/grey"-->
-<!--            android:textSize="16sp"-->
-<!--            android:text="Eng"/>-->
         <Spinner
             android:id="@+id/lang_spinner"
             android:layout_width="wrap_content"
@@ -121,7 +103,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/grey"
         android:textSize="16sp"
-        android:text="OTHER SETTINGS"
+        android:text="@string/other_settings"
         android:layout_marginBottom="32dp"/>
 
     <LinearLayout
@@ -138,13 +120,13 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:text="Update at night automatically"/>
+                android:text="@string/update_weather"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/grey"
                 android:textSize="12sp"
-                android:text="Update weather info between 23:00 and 07:00"/>
+                android:text="@string/update_weather_info"/>
         </LinearLayout>
 
         <Switch

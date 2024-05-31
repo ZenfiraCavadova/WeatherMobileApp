@@ -1,9 +1,7 @@
 package com.zenfira_cavadova.data.repositories
 
-import com.zenfira_cavadova.data.database.daos.WeatherDao
 import com.zenfira_cavadova.data.database.db.DatabaseManager
 import com.zenfira_cavadova.domain.entities.WeatherItem
-import com.zenfira_cavadova.domain.entities.response_models.GetAllWeatherResponseModels
 import com.zenfira_cavadova.domain.repositories.WeatherRepository
 
 class WeatherRepositoryImpl :WeatherRepository{
@@ -18,5 +16,4 @@ class WeatherRepositoryImpl :WeatherRepository{
     override suspend fun removeWeatherItem(weatherItem: WeatherItem) {
         DatabaseManager.database.weatherDao().deleteWeatherItem(weatherItem)
     }
-
 }

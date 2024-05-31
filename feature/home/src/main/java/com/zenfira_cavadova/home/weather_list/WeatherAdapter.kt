@@ -20,8 +20,8 @@ class WeatherAdapter:ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(
     }
     inner class WeatherViewHolder(private val  binding: WeatherContainerBinding): RecyclerView.ViewHolder(binding.root){
         fun bindData(item: WeatherItem){
-            binding.temperature.text = item.temperature
-            binding.highLowTemp.text = item.highAndLowTemp
+            binding.temperature.text = "${item.temperature}°"
+            binding.highLowTemp.text = "H:${item.highAndLowTemp.split(' ')[0]} L:${item.highAndLowTemp.split(' ')[1]}"
             binding.location.text = item.location
             binding.weatherIcon.setImageResource(item.weatherIcon)
             binding.weatherDescription.text = item.weatherDescription

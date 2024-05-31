@@ -1,28 +1,27 @@
 package com.zenfira_cavadova.settings
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.lifecycle.lifecycleScope
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import com.zenfira_cavadova.core.BaseFragment
 import com.zenfira_cavadova.settings.databinding.FragmentSettingsBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.Locale
 
 
-class SettingsFragment : Fragment() {
-
-    private lateinit var binding: FragmentSettingsBinding
-    private lateinit var settingsViewModel: SettingsViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding=FragmentSettingsBinding.inflate(inflater,container,false)
-        return binding.root
+class SettingsFragment : BaseFragment<FragmentSettingsBinding,SettingsViewModel,SettingsState,SettingsEffect,SettingsEvent>() {
+    private lateinit var settingsViewModel:SettingsViewModel
+    override fun getViewModelClass() =SettingsViewModel::class.java
+    override val getViewBinding: (LayoutInflater, ViewGroup?, Boolean) -> FragmentSettingsBinding ={inflater ,viewGroup, value ->
+        FragmentSettingsBinding.inflate(inflater,viewGroup,value)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,28 +39,47 @@ class SettingsFragment : Fragment() {
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
 
-        settingsViewModel=SettingsViewModel(sharedPreferences)
-
-        settingsViewModel.temperatureUnit.observe(viewLifecycleOwner){unit ->
-            val position =(binding.tempSpinner.adapter as ArrayAdapter<CharSequence>).getPosition(unit)
-            binding.tempSpinner.setSelection(position)
-        }
-
-        settingsViewModel.windSpeedUnit.observe(viewLifecycleOwner){unit ->
-            val position =(binding.windSpinner.adapter as ArrayAdapter<CharSequence>).getPosition(unit)
-            binding.windSpinner.setSelection(position)
-        }
-
-        settingsViewModel.language.observe(viewLifecycleOwner){language ->
-            val position =(binding.langSpinner.adapter as ArrayAdapter<CharSequence>).getPosition(language)
-            binding.langSpinner.setSelection(position)
-        }
-        settingsViewModel.updateWeather.observe(viewLifecycleOwner){update ->
-            binding.switchWeather.isChecked= update
-        }
+        settingsViewModel=SettingsViewModel.create(sharedPreferences)
 
         setupSpinners()
         setListeners()
+
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            settingsViewModel.temperatureUnit.collect{unit ->
+                val adapter =(binding.tempSpinner.adapter as? ArrayAdapter<CharSequence>)
+                adapter?.let {
+                    val position = it.getPosition(unit)
+                    binding.tempSpinner.setSelection(position)
+                }
+
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main){
+            settingsViewModel.windSpeedUnit.collect{unit ->
+                val adapter =(binding.windSpinner.adapter as? ArrayAdapter<CharSequence>)
+                adapter?.let {
+                    val position = it.getPosition(unit)
+                    binding.windSpinner.setSelection(position)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch (Dispatchers.Main){
+            settingsViewModel.language.collect{language ->
+                val adapter =(binding.langSpinner.adapter as? ArrayAdapter<CharSequence>)
+                adapter?.let {
+                    val position = it.getPosition(language)
+                binding.langSpinner.setSelection(position)
+                updateLocale(language)
+                    }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            settingsViewModel.updateWeather.collect{update ->
+                binding.switchWeather.isChecked= update
+            }
+        }
 
     }
 
@@ -102,7 +120,7 @@ class SettingsFragment : Fragment() {
         binding.windSpinner.onItemSelectedListener= object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedUnit= parent?.getItemAtPosition(position).toString()
-                settingsViewModel.setTemperatureUnit(selectedUnit)
+                settingsViewModel.setWindSpeedUnit(selectedUnit)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -112,7 +130,7 @@ class SettingsFragment : Fragment() {
         binding.langSpinner.onItemSelectedListener= object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedLang= parent?.getItemAtPosition(position).toString()
-                settingsViewModel.setTemperatureUnit(selectedLang)
+                settingsViewModel.setLanguage(selectedLang)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -124,6 +142,21 @@ class SettingsFragment : Fragment() {
         }
 
     }
+    private fun updateLocale(language:String){
+        val langCode= when (language){
+            "Eng"->"en"
+            "Aze"->"az"
+            else ->"en"
+        }
+        if (LocaleHelper.getLocale(requireContext())!= langCode){
+            LocaleHelper.setLocale(requireContext(),langCode)
+            val configuration =resources.configuration
+            configuration.setLocale(Locale(langCode))
+            resources.updateConfiguration(configuration, resources.displayMetrics)
+            Log.e("SettingsFragment", "Locale updated to $langCode")
+        }
+    }
+
 
     companion object{
         private const val SECRET_SHARED_PREF = "secret_shared_prefs"

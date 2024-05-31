@@ -12,4 +12,12 @@
         <item>Eng</item>
         <item>Aze</item>
     </string-array>
+    <string name="settings">SETTINGS</string>
+    <string name="units">UNITS</string>
+    <string name="temprature_units">Temprature units</string>
+    <string name="wind_speed_units">Wind speed units</string>
+    <string name="language">Language</string>
+    <string name="other_settings">OTHER SETTINGS</string>
+    <string name="update_weather">Update at night automatically</string>
+    <string name="update_weather_info">Update weather info between 23:00 and 07:00</string>
 </resources>

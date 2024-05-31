@@ -16,6 +16,8 @@ data class WeatherItem(
     val weatherIcon: Int,
     @ColumnInfo("weatherDescription")
     val weatherDescription: String,
+    @ColumnInfo("windSpeed")
+    val windSpeed:String,
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("id")
     val id: Int = 0,

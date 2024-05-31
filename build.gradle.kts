@@ -2,10 +2,12 @@
 buildscript {
     repositories {
         google()
+        mavenCentral()
     }
     dependencies {
         val navVersion = "2.5.3"
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navVersion")
+        classpath("com.google.gms:google-services:4.4.1")
     }
 }
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "438338513134",
+    "project_id": "weather-app-71ee0",
+    "storage_bucket": "weather-app-71ee0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438338513134:android:0b66871e6e5379ac6d2bff",
+        "android_client_info": {
+          "package_name": "com.zenfira_cavadova.weatherapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhT-7gKWFJT7yfWWpC9AqJxunyaBOyXgc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

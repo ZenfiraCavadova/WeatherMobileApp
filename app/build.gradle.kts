@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -46,7 +47,7 @@ dependencies {
     implementation(project(":feature:home"))
     implementation(project(":feature:add"))
     implementation(project(":feature:settings"))
-    implementation(project(":feature:search"))
+    implementation(project(":feature:details"))
     val navigationVersion = "2.5.3"
 
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
@@ -63,5 +64,9 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:$roomVersion")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-config:21.0.2")
 
 }
