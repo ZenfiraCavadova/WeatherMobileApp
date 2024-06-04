@@ -41,8 +41,36 @@ class AddAndRemoveViewModel():BaseViewModel<AddState,AddEffect,AddEvent>() {
         }
     }
 
+    override fun onEventUpdate(event: AddEvent) {
+        when (event){
+            is AddEvent.SaveWeather ->saveWeather(
+                event.location,event.highAndLowTemp,event.temperature,event.weatherIcon,event.weatherDescription, event.windSpeed
+            )
+        }
+    }
+
+    fun saveWeather(temperature: String, highAndLowTemp: String,location: String, weatherIcon: Int, weatherDescription: String, windSpeed:String){
+        val weatherItem=WeatherItem(
+            temperature = temperature,
+            highAndLowTemp = highAndLowTemp,
+            location =location,
+            weatherIcon = weatherIcon,
+            weatherDescription = weatherDescription,
+            windSpeed =windSpeed
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            weatherRepository.addWeatherItem(weatherItem)
+             fetchAllWeatherItems()
+        }
+        postEffect(AddEffect.OnWeatherAdded)
+//        addWeatherItem(weatherItem)
+//        postEffect(AddEffect.OnWeatherAdded)
+
+    }
+
     fun fetchWeatherForCity(cityName:String, onResult: (WeatherItem?)->Unit){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+//            _weatherItemsFlow.emit(emptyList())
             try {
                 val response=weatherService.getWeatherForecast(cityName)
                 Log.e("WeatherAPI", "Response: $response")
@@ -55,6 +83,7 @@ class AddAndRemoveViewModel():BaseViewModel<AddState,AddEffect,AddEvent>() {
                     windSpeed = response.wind.speed.toString()
                 )
                 onResult(weatherItem)
+                _weatherItemsFlow.emit(listOf(weatherItem))
             }catch (e:Exception){
                 Log.e("WeatherAPI", "Error fetching weather data", e)
                 onResult(null)

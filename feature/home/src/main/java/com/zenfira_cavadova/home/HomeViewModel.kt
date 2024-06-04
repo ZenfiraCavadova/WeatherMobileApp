@@ -19,6 +19,18 @@ class HomeViewModel : BaseViewModel<HomeState,HomeEffect,HomeEvent>() {
     private val weatherService: WeatherService by lazy { NetworkManager.getWeatherServiceInstance() }
 
     init {
+        viewModelScope.launch(Dispatchers.IO){
+            weatherRepository.getAllWeatherItems().
+            onEach { currentDatabaseValue ->
+                setState(
+                    getCurrentState()
+                        .copy(
+                            weatherItem = currentDatabaseValue
+                        )
+                )
+            }
+        }
+//            }.launchIn(viewModelScope)
         fetchAllWeatherItems()
     }
     fun addWeatherItem(weatherItem: WeatherItem){
@@ -55,7 +67,5 @@ class HomeViewModel : BaseViewModel<HomeState,HomeEffect,HomeEvent>() {
         }
     }
 
-    override fun getInitialState(): HomeState {
-        return HomeState(isLoading = false)
-    }
+    override fun getInitialState(): HomeState = HomeState(isLoading = false)
 }
