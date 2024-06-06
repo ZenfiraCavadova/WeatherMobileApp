@@ -2,6 +2,8 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
+    id ("androidx.navigation.safeargs")
+    id ("com.google.dagger.hilt.android")
 }
 
 android {
@@ -59,4 +61,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:$roomVersion")
+
+    implementation ("com.google.dagger:hilt-android:2.44")
+    kapt ("com.google.dagger:hilt-compiler:2.44")
 }

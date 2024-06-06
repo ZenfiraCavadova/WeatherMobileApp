@@ -7,11 +7,12 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.zenfira_cavadova.domain.entities.WeatherItem
 import com.zenfira_cavadova.domain.entities.response_models.GetAllWeatherResponseModels
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WeatherDao {
     @Query("SELECT * FROM 'weather_database'")
-    fun getAllWeatherItems():List<WeatherItem>
+    fun getAllWeatherItems(): Flow<List<WeatherItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertWeatherItem(weatherItem: WeatherItem)

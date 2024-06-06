@@ -27,9 +27,8 @@ class WeatherAdapter:ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(
             binding.temperature.text = "${item.temperature}°"
             binding.highLowTemp.text = "H:${item.highAndLowTemp.split(' ')[0]} L:${item.highAndLowTemp.split(' ')[1]}"
             binding.location.text = item.location
-            binding.weatherIcon.setImageResource(item.weatherIcon)
+//            binding.weatherIcon.setImageResource(item.weatherIcon)
             binding.weatherDescription.text = item.weatherDescription
-//            binding.date.text = formatDate(item.timestamp)
         }
     }
     private class WeatherDiffCallback : DiffUtil.ItemCallback<WeatherItem>() {

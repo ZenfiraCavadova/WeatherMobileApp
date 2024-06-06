@@ -1,19 +1,22 @@
 package com.zenfira_cavadova.details
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.zenfira_cavadova.core.BaseFragment
 import com.zenfira_cavadova.details.databinding.FragmentDetailsBinding
 import com.zenfira_cavadova.domain.entities.WeatherItem
 import kotlinx.coroutines.launch
+import androidx.navigation.fragment.navArgs
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class DetailsFragment : BaseFragment<FragmentDetailsBinding,DetailsViewModel,DetailsState,DetailsEffect,DetailsEvent>() {
 
+//    private val args:DetailsFragmentArgs by navArgs()
     override fun getViewModelClass()=DetailsViewModel::class.java
     override val getViewBinding: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDetailsBinding= {inflater,viewGroup, value ->
         FragmentDetailsBinding.inflate(inflater,viewGroup,value)
@@ -21,12 +24,10 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding,DetailsViewModel,Det
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//
-//        val weatherItem=arguments?.getParcelable<WeatherItem>("weatherItem")
-//
-//        weatherItem?.let {
-//            viewModel.setWeatherItem(it)
-//        }
+
+//        val weatherItem=args.weatherItem
+//            viewModel.setWeatherItem(weatherItem)
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.weatherItem.collect{ item ->

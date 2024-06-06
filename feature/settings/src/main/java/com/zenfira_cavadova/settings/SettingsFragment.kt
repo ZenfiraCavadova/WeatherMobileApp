@@ -11,14 +11,24 @@ import androidx.lifecycle.lifecycleScope
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.zenfira_cavadova.core.BaseFragment
+import com.zenfira_cavadova.domain.usecase.GetWeatherUseCase
+import com.zenfira_cavadova.domain.usecase.RemoveWeatherUseCase
 import com.zenfira_cavadova.settings.databinding.FragmentSettingsBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Locale
+import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class SettingsFragment : BaseFragment<FragmentSettingsBinding,SettingsViewModel,SettingsState,SettingsEffect,SettingsEvent>() {
     private lateinit var settingsViewModel:SettingsViewModel
+    @Inject
+    lateinit var getWeatherItemsUseCase: GetWeatherUseCase
+
+    @Inject
+    lateinit var removeWeatherUseCase: RemoveWeatherUseCase
     override fun getViewModelClass() =SettingsViewModel::class.java
     override val getViewBinding: (LayoutInflater, ViewGroup?, Boolean) -> FragmentSettingsBinding ={inflater ,viewGroup, value ->
         FragmentSettingsBinding.inflate(inflater,viewGroup,value)
@@ -39,7 +49,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding,SettingsViewModel,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
 
-        settingsViewModel=SettingsViewModel.create(sharedPreferences)
+        settingsViewModel=SettingsViewModel.create(sharedPreferences,getWeatherItemsUseCase, removeWeatherUseCase)
 
         setupSpinners()
         setListeners()

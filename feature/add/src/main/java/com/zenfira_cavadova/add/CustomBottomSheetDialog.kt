@@ -66,7 +66,8 @@ class CustomBottomSheetDialog:BottomSheetDialogFragment() {
             if (cityName.isNotBlank()){
                 viewModel.fetchWeatherForCity(cityName){weatherItem ->
                     if (weatherItem != null){
-                        viewModel.addWeatherItem(weatherItem)
+//                        viewModel.
+                        //                        viewModel.addWeatherItem(weatherItem)
 //                        Toast.makeText(requireContext(), "$cityName added",
 //                            Toast.LENGTH_SHORT).show()
                         dismiss()

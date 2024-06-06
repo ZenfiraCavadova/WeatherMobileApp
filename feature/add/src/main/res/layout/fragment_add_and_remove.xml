@@ -24,4 +24,5 @@
         android:layout_margin="16dp"
         android:contentDescription="add_city"
         android:src="@drawable/ic_add" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -5,43 +5,54 @@ import androidx.lifecycle.viewModelScope
 import com.zenfira_cavadova.core.BaseViewModel
 import com.zenfira_cavadova.data.api.NetworkManager
 import com.zenfira_cavadova.data.api.WeatherService
-import com.zenfira_cavadova.data.repositories.WeatherRepositoryImpl
 import com.zenfira_cavadova.domain.entities.WeatherItem
-import com.zenfira_cavadova.domain.repositories.WeatherRepository
+import com.zenfira_cavadova.domain.usecase.GetWeatherUseCase
+import com.zenfira_cavadova.domain.usecase.RemoveWeatherUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AddAndRemoveViewModel():BaseViewModel<AddState,AddEffect,AddEvent>() {
+@HiltViewModel
+class AddAndRemoveViewModel @Inject constructor(
+    getWeatherItemsUseCase: GetWeatherUseCase,
+    private val removeWeatherUseCase: RemoveWeatherUseCase
+) :BaseViewModel<AddState,AddEffect,AddEvent>() {
     private val _weatherItemsFlow= MutableStateFlow<List<WeatherItem>>(emptyList())
     val weatherItemsFlow:Flow<List<WeatherItem>> = _weatherItemsFlow
-    private val weatherRepository:WeatherRepository by lazy { WeatherRepositoryImpl() }
+//    private val weatherRepository:WeatherRepository by lazy { WeatherRepositoryImpl() }
     private val weatherService:WeatherService by lazy { NetworkManager.getWeatherServiceInstance() }
 
+    init {
+        getWeatherItemsUseCase().onEach {currentDatabaseValue->
+                setState(
+                    getCurrentState()
+                        .copy(
+                            weatherItems = currentDatabaseValue
+                        )
+                )
 
-    fun getAllWeatherItems()=weatherRepository.getAllWeatherItems()
-
-    fun addWeatherItem(weatherItem: WeatherItem){
-        viewModelScope.launch(Dispatchers.IO) {
-            weatherRepository.addWeatherItem(weatherItem)
+            }.launchIn(viewModelScope)
         }
-    }
+
+
+//    fun addWeatherItem(weatherItem: WeatherItem){
+//        viewModelScope.launch(Dispatchers.IO) {
+//            weatherRepository.addWeatherItem(weatherItem)
+//        }
+//    }
 
     fun removeWeatherItem(weatherItem: WeatherItem){
         viewModelScope.launch(Dispatchers.IO){
-            weatherRepository.removeWeatherItem(weatherItem)
+            removeWeatherUseCase(weatherItem)
         }
     }
 
-    fun fetchAllWeatherItems(){
-        viewModelScope.launch(Dispatchers.IO){
-            val weatherItems= weatherRepository.getAllWeatherItems()
-            _weatherItemsFlow.emit(weatherItems)
-        }
-    }
-
-    override fun onEventUpdate(event: AddEvent) {
+    override  fun onEventUpdate(event: AddEvent) {
         when (event){
             is AddEvent.SaveWeather ->saveWeather(
                 event.location,event.highAndLowTemp,event.temperature,event.weatherIcon,event.weatherDescription, event.windSpeed
@@ -58,14 +69,10 @@ class AddAndRemoveViewModel():BaseViewModel<AddState,AddEffect,AddEvent>() {
             weatherDescription = weatherDescription,
             windSpeed =windSpeed
         )
-        viewModelScope.launch(Dispatchers.IO) {
-            weatherRepository.addWeatherItem(weatherItem)
-             fetchAllWeatherItems()
-        }
+//        viewModelScope.launch(Dispatchers.IO) {
+//            weatherRepository.addWeatherItem(weatherItem)
+//        }
         postEffect(AddEffect.OnWeatherAdded)
-//        addWeatherItem(weatherItem)
-//        postEffect(AddEffect.OnWeatherAdded)
-
     }
 
     fun fetchWeatherForCity(cityName:String, onResult: (WeatherItem?)->Unit){

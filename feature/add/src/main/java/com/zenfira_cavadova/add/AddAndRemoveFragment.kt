@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import com.zenfira_cavadova.add.databinding.FragmentAddAndRemoveBinding
 import com.zenfira_cavadova.add.weather_list.WeatherAdapter
 import com.zenfira_cavadova.core.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class AddAndRemoveFragment : BaseFragment<FragmentAddAndRemoveBinding, AddAndRemoveViewModel,AddState, AddEffect,AddEvent>() {
-    private lateinit var adapter: WeatherAdapter
+    private val adapter: WeatherAdapter=WeatherAdapter()
 
     override fun getViewModelClass()=AddAndRemoveViewModel::class.java
 
@@ -21,11 +23,8 @@ class AddAndRemoveFragment : BaseFragment<FragmentAddAndRemoveBinding, AddAndRem
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchAllWeatherItems()
 
-        adapter=WeatherAdapter()
         Log.e("AddAndRemoveFragment", "RecyclerView $adapter set")
-
         binding.weatherList.adapter=adapter
 
 
@@ -38,10 +37,8 @@ class AddAndRemoveFragment : BaseFragment<FragmentAddAndRemoveBinding, AddAndRem
         CustomBottomSheetDialog().show(parentFragmentManager, CustomBottomSheetDialog::class.java.canonicalName)
     }
     override fun onStateUpdate(state: AddState) {
-        state.weatherItems.let { list ->
-            Log.e("AddAndRemoveFragment", "State updated with weather items: $list")
-            adapter.submitList(list)
-        }
+        adapter.submitList(state.weatherItems)
+
     }
 
 }
