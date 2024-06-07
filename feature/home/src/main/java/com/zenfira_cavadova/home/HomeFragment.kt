@@ -31,8 +31,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel,HomeState,Ho
         settingsViewModel = ViewModelProvider(requireActivity()).get(SettingsViewModel::class.java)
         adapter= WeatherAdapter(
             onItemClicked = {weatherItem ->
-//                val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment2(weatherItem)
-//                findNavController().navigate(action)
+                val action=HomeFragmentDirections.actionHomeFragmentToDetailsFragment2(weatherItem)
+                findNavController().navigate(action)
             },
             temperatureUnit = "K",
             windSpeedUnit = "mph"

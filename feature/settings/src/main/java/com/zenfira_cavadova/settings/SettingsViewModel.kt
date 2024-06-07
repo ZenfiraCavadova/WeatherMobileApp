@@ -101,13 +101,6 @@ class SettingsViewModel @Inject constructor(
         else{
             workManager.cancelUniqueWork("WeatherUpdateWork")
         }
-//        val uploadWorkRequest : WorkRequest =
-//            OneTimeWorkRequestBuilder<UploadWorker>()
-//                .build()
-//
-//        WorkManager
-//            .getInstance(context)
-//            .enqueue(uploadWorkRequest)
     }
 
     override fun getInitialState(): SettingsState {
