@@ -3,13 +3,17 @@ package com.zenfira_cavadova.add.weather_list
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.zenfira_cavadova.add.R
+import com.zenfira_cavadova.add.WeatherItemClickListener
 import com.zenfira_cavadova.add.databinding.WeatherContainerBinding
 import com.zenfira_cavadova.domain.entities.WeatherItem
 
-class WeatherAdapter:ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
+class WeatherAdapter(private val weatherItemClickListener: WeatherItemClickListener):ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val view= WeatherContainerBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return WeatherViewHolder(view)
@@ -20,6 +24,10 @@ class WeatherAdapter:ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(
         Log.e("WeatherAdapter", "onBindViewHolder called with item: $item")
         Log.e("WeatherAdapter", "onBindViewHolder called for position: $position with item: $item")
         holder.bindData(item)
+
+        holder.itemView.findViewById<ImageButton>(R.id.btn_remove).setOnClickListener {
+            weatherItemClickListener.onRemoveItemClick(item)
+        }
     }
     inner class WeatherViewHolder(private val  binding: WeatherContainerBinding): RecyclerView.ViewHolder(binding.root){
         fun bindData(item: WeatherItem){

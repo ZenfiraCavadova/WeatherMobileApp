@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import com.zenfira_cavadova.add.databinding.FragmentAddAndRemoveBinding
 import com.zenfira_cavadova.add.weather_list.WeatherAdapter
 import com.zenfira_cavadova.core.BaseFragment
+import com.zenfira_cavadova.domain.entities.WeatherItem
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class AddAndRemoveFragment : BaseFragment<FragmentAddAndRemoveBinding, AddAndRemoveViewModel,AddState, AddEffect,AddEvent>() {
-    private val adapter: WeatherAdapter=WeatherAdapter()
+class AddAndRemoveFragment : BaseFragment<FragmentAddAndRemoveBinding, AddAndRemoveViewModel,AddState, AddEffect,AddEvent>(),WeatherItemClickListener {
+    private val adapter: WeatherAdapter=WeatherAdapter(this)
 
     override fun getViewModelClass()=AddAndRemoveViewModel::class.java
 
@@ -32,6 +33,10 @@ class AddAndRemoveFragment : BaseFragment<FragmentAddAndRemoveBinding, AddAndRem
             showBottomSheetDialog()
         }
     }
+    override  fun onRemoveItemClick(weatherItem: WeatherItem){
+        viewModel.removeWeatherItem(weatherItem)
+    }
+
 
     private fun showBottomSheetDialog(){
         CustomBottomSheetDialog().show(parentFragmentManager, CustomBottomSheetDialog::class.java.canonicalName)

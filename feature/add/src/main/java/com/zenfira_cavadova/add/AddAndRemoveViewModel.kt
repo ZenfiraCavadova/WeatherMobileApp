@@ -76,6 +76,7 @@ class AddAndRemoveViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             addWeatherUseCase(weatherItem)
         }
+        addWeatherItem(weatherItem)
         postEffect(AddEffect.OnWeatherAdded)
     }
 
@@ -93,6 +94,7 @@ class AddAndRemoveViewModel @Inject constructor(
                     windSpeed = response.wind.speed.toString()
                 )
                 onResult(weatherItem)
+                addWeatherItem(weatherItem)
                 _weatherItemsFlow.emit(listOf(weatherItem))
             }catch (e:Exception){
                 Log.e("WeatherAPI", "Error fetching weather data", e)
@@ -100,7 +102,6 @@ class AddAndRemoveViewModel @Inject constructor(
             }
         }
     }
-
     override fun getInitialState(): AddState {
         return AddState(isLoading = false, weatherItems = emptyList())
     }
