@@ -24,8 +24,6 @@ class WeatherAdapter(private val weatherItemClickListener: WeatherItemClickListe
         Log.e("WeatherAdapter", "onBindViewHolder called for position: $position with item: $item")
         holder.bindData(item)
 
-//        holder.itemView.findViewById<ImageButton>(R.id.btn_remove).setOnClickListener {
-//        }
     }
     inner class WeatherViewHolder(private val  binding: WeatherContainerBinding): RecyclerView.ViewHolder(binding.root){
         fun bindData(item: WeatherItem){
