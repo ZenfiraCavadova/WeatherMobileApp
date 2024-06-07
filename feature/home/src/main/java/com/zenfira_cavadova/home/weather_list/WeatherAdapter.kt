@@ -1,6 +1,5 @@
 package com.zenfira_cavadova.home.weather_list
 
-import android.health.connect.datatypes.units.Temperature
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zenfira_cavadova.domain.entities.WeatherItem
 import com.zenfira_cavadova.home.R
 import com.zenfira_cavadova.home.databinding.WeatherContainerBinding
-import kotlin.math.roundToInt
 
 class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var temperatureUnit: String, private var windSpeedUnit: String):ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {

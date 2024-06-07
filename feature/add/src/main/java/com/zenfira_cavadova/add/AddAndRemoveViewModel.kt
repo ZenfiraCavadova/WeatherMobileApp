@@ -38,7 +38,6 @@ class AddAndRemoveViewModel @Inject constructor(
                             weatherItems = currentDatabaseValue
                         )
                 )
-
             }.launchIn(viewModelScope)
         }
 

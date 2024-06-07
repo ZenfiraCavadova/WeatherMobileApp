@@ -10,7 +10,7 @@ object DatabaseManager {
             context,
             AppDatabase::class.java, "weather_database"
         )
-//            .addMigrations(AppDatabase.MIGRATION_1_2)
+            .addMigrations(AppDatabase.MIGRATION_1_2)
             .build()
     }
 
