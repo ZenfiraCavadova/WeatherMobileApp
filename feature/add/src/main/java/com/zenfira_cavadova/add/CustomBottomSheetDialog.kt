@@ -14,7 +14,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.zenfira_cavadova.add.databinding.DialogCustomBottomSheetBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CustomBottomSheetDialog:BottomSheetDialogFragment() {
     private lateinit var binding: DialogCustomBottomSheetBinding
     private val viewModel: AddAndRemoveViewModel by viewModels()

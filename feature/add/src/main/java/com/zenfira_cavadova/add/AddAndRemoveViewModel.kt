@@ -22,12 +22,13 @@ import javax.inject.Inject
 class AddAndRemoveViewModel @Inject constructor(
     getWeatherItemsUseCase: GetWeatherUseCase,
     private val addWeatherUseCase: AddWeatherUseCase,
-    private val removeWeatherUseCase: RemoveWeatherUseCase
+    private val removeWeatherUseCase: RemoveWeatherUseCase,
+    private val weatherService:WeatherService
 ) :BaseViewModel<AddState,AddEffect,AddEvent>() {
     private val _weatherItemsFlow= MutableStateFlow<List<WeatherItem>>(emptyList())
     val weatherItemsFlow:Flow<List<WeatherItem>> = _weatherItemsFlow
 //    private val weatherRepository:WeatherRepository by lazy { WeatherRepositoryImpl() }
-    private val weatherService:WeatherService by lazy { NetworkManager.getWeatherServiceInstance() }
+//    private val weatherService:WeatherService by lazy { NetworkManager.getWeatherServiceInstance() }
 
     init {
         getWeatherItemsUseCase()

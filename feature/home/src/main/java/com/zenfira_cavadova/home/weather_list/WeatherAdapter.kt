@@ -44,7 +44,7 @@ class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var 
               }
               highLowTemp.text = "$highTemp and $lowTemp"
               location.text = item.location
-            binding.weatherIcon.setImageResource(getWeatherIconResource(item.weatherIcon))
+              binding.weatherIcon.setImageResource(getWeatherIconResource(item.weatherIcon))
               weatherDescription.text = item.weatherDescription
               root.setOnClickListener {
                   onItemClicked(item)

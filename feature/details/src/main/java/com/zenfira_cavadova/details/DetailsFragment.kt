@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.zenfira_cavadova.core.BaseFragment
 import com.zenfira_cavadova.details.databinding.FragmentDetailsBinding
-import com.zenfira_cavadova.domain.entities.WeatherItem
 import kotlinx.coroutines.launch
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class DetailsFragment : BaseFragment<FragmentDetailsBinding,DetailsViewModel,DetailsState,DetailsEffect,DetailsEvent>() {
 
-//    private val args:DetailsFragmentArgs by navArgs()
+//    private val args by navArgs<DetailsFragmentArgs>()
     override fun getViewModelClass()=DetailsViewModel::class.java
     override val getViewBinding: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDetailsBinding= {inflater,viewGroup, value ->
         FragmentDetailsBinding.inflate(inflater,viewGroup,value)
@@ -27,7 +26,6 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding,DetailsViewModel,Det
 
 //        val weatherItem=args.weatherItem
 //            viewModel.setWeatherItem(weatherItem)
-
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.weatherItem.collect{ item ->
