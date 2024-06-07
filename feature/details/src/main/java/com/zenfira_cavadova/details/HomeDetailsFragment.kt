@@ -13,9 +13,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class DetailsFragment : BaseFragment<FragmentDetailsBinding,DetailsViewModel,DetailsState,DetailsEffect,DetailsEvent>() {
+class HomeDetailsFragment : BaseFragment<FragmentDetailsBinding,DetailsViewModel,DetailsState,DetailsEffect,DetailsEvent>() {
+    private val args by navArgs<HomeDetailsFragmentArgs>()
 
-//    private val args by navArgs<DetailsFragmentArgs>()
     override fun getViewModelClass()=DetailsViewModel::class.java
     override val getViewBinding: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDetailsBinding= {inflater,viewGroup, value ->
         FragmentDetailsBinding.inflate(inflater,viewGroup,value)
