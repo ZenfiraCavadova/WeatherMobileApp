@@ -54,6 +54,11 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding,SettingsViewModel,
         setupSpinners()
         setListeners()
 
+        binding.switchWeather.setOnCheckedChangeListener{_, isChecked ->
+            settingsViewModel.setUpdateWeather(isChecked)
+            settingsViewModel.schedulePeriodicWeatherUpdate(requireContext(),isChecked)
+        }
+
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             settingsViewModel.temperatureUnit.collect{unit ->
                 val adapter =(binding.tempSpinner.adapter as? ArrayAdapter<CharSequence>)

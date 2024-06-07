@@ -56,7 +56,7 @@ class HomeViewModel @Inject constructor(
                 Log.e("WeatherAPI", "Response: $response")
                 val temperatureUnit = settingsViewModel.temperatureUnit.value
                 val windSpeedUnit = settingsViewModel.windSpeedUnit.value
-                val tempInKelvin =response.main.temperature ?: 0.0
+                val tempInKelvin =response.main.temp ?: 0.0
                 val highTempInKelvin =response.main.tepMax ?:0.0
                 val lowTempInKelvin=response.main.tepMin ?:0.0
                 val windSpeedInMetersPerSec=response.wind.speed ?: 0.0

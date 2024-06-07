@@ -9,7 +9,9 @@ object DatabaseManager {
         database = Room.databaseBuilder(
             context,
             AppDatabase::class.java, "weather_database"
-        ).build()
+        )
+//            .addMigrations(AppDatabase.MIGRATION_1_2)
+            .build()
     }
 
 }

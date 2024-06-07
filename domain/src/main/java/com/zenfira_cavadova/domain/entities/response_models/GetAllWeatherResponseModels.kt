@@ -26,7 +26,7 @@ data class GetAllWeatherResponseModels(
 ){
     data class Main(
         @SerializedName("temperature")
-        val temperature: Double?,
+        val temp: Double?,
         @SerializedName("temp_min")
         val tepMin:Double,
         @SerializedName("temp_max")

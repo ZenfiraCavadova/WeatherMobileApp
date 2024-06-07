@@ -42,6 +42,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":core"))
+    implementation("androidx.hilt:hilt-common:1.2.0")
 //    implementation(project(":feature:home"))
 //    implementation(project(":feature:add"))
 
@@ -66,6 +67,9 @@ dependencies {
 
     implementation ("androidx.security:security-crypto:1.1.0-alpha06")
 
-    implementation ("com.google.dagger:hilt-android:2.44")
-    kapt ("com.google.dagger:hilt-compiler:2.44")
+    implementation ("com.google.dagger:hilt-android:2.49")
+    kapt ("com.google.dagger:hilt-compiler:2.49")
+
+    val work_version = "2.9.0"
+    implementation("androidx.work:work-runtime-ktx:$work_version")
 }

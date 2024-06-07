@@ -1,15 +1,24 @@
 package com.zenfira_cavadova.settings
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.viewModelScope
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import com.zenfira_cavadova.core.BaseViewModel
 import com.zenfira_cavadova.domain.usecase.GetWeatherUseCase
 import com.zenfira_cavadova.domain.usecase.RemoveWeatherUseCase
+import com.zenfira_cavadova.settings.workmanagers.UploadWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -76,6 +85,29 @@ class SettingsViewModel @Inject constructor(
     fun setUpdateWeather(update:Boolean){
             _updateWeather.value = update
             sharedPreferences.edit().putBoolean("update_weather", update).apply()
+    }
+
+    fun schedulePeriodicWeatherUpdate(context: Context, enable:Boolean){
+        val workManager=WorkManager.getInstance(context)
+        val periodicWorkRequest= PeriodicWorkRequestBuilder<UploadWorker>(24,TimeUnit.HOURS).build()
+
+        if (enable){
+            workManager.enqueueUniquePeriodicWork(
+                "WeatherUpdateWork",
+                ExistingPeriodicWorkPolicy.REPLACE,
+                periodicWorkRequest
+            )
+        }
+        else{
+            workManager.cancelUniqueWork("WeatherUpdateWork")
+        }
+//        val uploadWorkRequest : WorkRequest =
+//            OneTimeWorkRequestBuilder<UploadWorker>()
+//                .build()
+//
+//        WorkManager
+//            .getInstance(context)
+//            .enqueue(uploadWorkRequest)
     }
 
     override fun getInitialState(): SettingsState {
