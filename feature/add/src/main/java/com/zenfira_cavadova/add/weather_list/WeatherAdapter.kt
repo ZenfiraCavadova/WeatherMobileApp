@@ -7,15 +7,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.zenfira_cavadova.add.R
-import com.zenfira_cavadova.add.WeatherItemClickListener
-import com.zenfira_cavadova.add.databinding.WeatherContainerBinding
+import com.zenfira_cavadova.add.databinding.RecyclerWeatherViewBinding
 import com.zenfira_cavadova.domain.entities.WeatherItem
 
-class WeatherAdapter(private val weatherItemClickListener: WeatherItemClickListener):ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
+class WeatherAdapter:ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
+
+    var weatherItemClickListener: (WeatherItem) -> Unit = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
-        val view= WeatherContainerBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return WeatherViewHolder(view)
+        val binding= RecyclerWeatherViewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return WeatherViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
@@ -27,7 +28,7 @@ class WeatherAdapter(private val weatherItemClickListener: WeatherItemClickListe
 //        holder.itemView.findViewById<ImageButton>(R.id.btn_remove).setOnClickListener {
 //        }
     }
-    inner class WeatherViewHolder(private val  binding: WeatherContainerBinding): RecyclerView.ViewHolder(binding.root){
+    inner class WeatherViewHolder(private val  binding: RecyclerWeatherViewBinding): RecyclerView.ViewHolder(binding.root){
         fun bindData(item: WeatherItem){
             Log.e("WeatherAdapter", "Binding data for location: ${item.location}")
             binding.temperature.text = "${item.temperature}°"
@@ -37,7 +38,7 @@ class WeatherAdapter(private val weatherItemClickListener: WeatherItemClickListe
             binding.weatherDescription.text = item.weatherDescription
 
             binding.btnRemove.setOnClickListener {
-                weatherItemClickListener.onRemoveItemClick(item)
+                weatherItemClickListener(item)
             }
         }
     }
