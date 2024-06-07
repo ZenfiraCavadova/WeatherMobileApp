@@ -5,13 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.zenfira_cavadova.core.BaseViewModel
 import com.zenfira_cavadova.data.api.NetworkManager
 import com.zenfira_cavadova.data.api.WeatherService
-import com.zenfira_cavadova.data.repositories.WeatherRepositoryImpl
 import com.zenfira_cavadova.domain.entities.WeatherItem
 import com.zenfira_cavadova.domain.usecase.GetWeatherUseCase
 import com.zenfira_cavadova.domain.usecase.RemoveWeatherUseCase
 import com.zenfira_cavadova.settings.SettingsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -82,7 +80,7 @@ class HomeViewModel @Inject constructor(
 
                     highAndLowTemp = "H:$highTemp L:$lowTemp",
                     location = response.location,
-                    weatherIcon = response.weather[0].icon ?:0,
+                    weatherIcon = response.weather[0].icon ?:"",
                     weatherDescription = response.weather[0].description,
                     windSpeed = when(windSpeedUnit){
                         "mph"->"${(windSpeedInMetersPerSec* 2.23694).roundToInt()} mph"

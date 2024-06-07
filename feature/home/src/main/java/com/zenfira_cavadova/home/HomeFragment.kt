@@ -52,7 +52,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel,HomeState,Ho
 
 
         viewLifecycleOwner.lifecycleScope.launch {
-            settingsViewModel.windSpeedUnit.collect { unit ->
+            settingsViewModel.temperatureUnit.collect { unit ->
                 adapter?.updateUnits(settingsViewModel.temperatureUnit.value, unit)
             }
         }

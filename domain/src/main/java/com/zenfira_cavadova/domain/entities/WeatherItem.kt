@@ -17,7 +17,7 @@ data class WeatherItem(
     @ColumnInfo("location")
     val location: String,
     @ColumnInfo("weatherIcon")
-    val weatherIcon: Int,
+    val weatherIcon: String,
     @ColumnInfo("weatherDescription")
     val weatherDescription: String,
     @ColumnInfo("windSpeed")

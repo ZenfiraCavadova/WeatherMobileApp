@@ -11,18 +11,6 @@ data class GetAllWeatherResponseModels(
     val weather: List<Weather>,
     @SerializedName("wind")
     val wind:Wind
-//    @SerializedName("temperature")
-//    val temperature: String,
-//    @SerializedName("highLow")
-//    val highAndLowTemp: String,
-//    @SerializedName("location")
-//    val location: String,
-//    @SerializedName("weatherIcon")
-//    val weatherIcon: Int,
-//    @SerializedName("weatherDescription")
-//    val weatherDescription: String,
-//    @SerializedName("windSpeed")
-//    val windSpeed:String
 ){
     data class Main(
         @SerializedName("temperature")
@@ -37,7 +25,7 @@ data class GetAllWeatherResponseModels(
         @SerializedName("description")
         val description:String,
         @SerializedName("icon")
-        val icon:Int
+        val icon:String
     )
 
     data class Wind(

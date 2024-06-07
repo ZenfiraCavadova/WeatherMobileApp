@@ -59,12 +59,13 @@ class AddAndRemoveViewModel @Inject constructor(
     override  fun onEventUpdate(event: AddEvent) {
         when (event){
             is AddEvent.SaveWeather ->saveWeather(
-                event.location,event.highAndLowTemp,event.temperature,event.weatherIcon,event.weatherDescription, event.windSpeed
+                event.location,event.highAndLowTemp,event.temperature,
+                event.weatherIcon.toString(),event.weatherDescription, event.windSpeed
             )
         }
     }
 
-    fun saveWeather(temperature: String, highAndLowTemp: String,location: String, weatherIcon: Int, weatherDescription: String, windSpeed:String){
+    fun saveWeather(temperature: String, highAndLowTemp: String,location: String, weatherIcon: String, weatherDescription: String, windSpeed:String){
         val weatherItem=WeatherItem(
             temperature = temperature,
             highAndLowTemp = highAndLowTemp,
@@ -89,7 +90,7 @@ class AddAndRemoveViewModel @Inject constructor(
                     temperature = response.main.temp?.toString() ?: "N/A",
                     highAndLowTemp = "H:${response.main.tepMax} L:${response.main.tepMin}",
                     location = response.location,
-                    weatherIcon = response.weather[0].icon ?:0,
+                    weatherIcon = response.weather[0].icon ?:"",
                     weatherDescription = response.weather[0].description,
                     windSpeed = response.wind.speed.toString()
                 )

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.zenfira_cavadova.domain.entities.WeatherItem
+import com.zenfira_cavadova.home.R
 import com.zenfira_cavadova.home.databinding.WeatherContainerBinding
 import kotlin.math.roundToInt
 
@@ -45,7 +46,7 @@ class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var 
               }
               highLowTemp.text = "$highTemp and $lowTemp"
               location.text = item.location
-//            binding.weatherIcon.setImageResource(item.weatherIcon)
+            binding.weatherIcon.setImageResource(getWeatherIconResource(item.weatherIcon))
               weatherDescription.text = item.weatherDescription
               root.setOnClickListener {
                   onItemClicked(item)
@@ -112,6 +113,21 @@ class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var 
                     oldItem.location == newItem.location &&
                     oldItem.weatherIcon == newItem.weatherIcon &&
                     oldItem.weatherDescription == newItem.weatherDescription
+        }
+    }
+
+    fun getWeatherIconResource(iconCode:String):Int{
+        return  when (iconCode){
+            "01d"-> R.drawable.ic_clear
+            "02d"->R.drawable.ic_few_clouds
+            "03d"->R.drawable.ic_scattered_clouds
+            "04d"->R.drawable.ic_broken_clouds
+            "09d"->R.drawable.ic_shower_rain
+            "10d"->R.drawable.ic_rain
+            "11d"->R.drawable.ic_thunderstorm
+            "13d"->R.drawable.ic_snow
+            "50d"->R.drawable.ic_mist
+            else-> R.drawable.ic_few_clouds
         }
     }
 }
