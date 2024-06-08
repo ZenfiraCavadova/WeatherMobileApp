@@ -68,20 +68,9 @@ class CustomBottomSheetDialog:BottomSheetDialogFragment() {
             if (cityName.isNotBlank()){
                 viewModel.fetchWeatherForCity(cityName){weatherItem ->
                     if (weatherItem != null){
-//                        viewModel.
-                        //                        viewModel.addWeatherItem(weatherItem)
-//                        Toast.makeText(requireContext(), "$cityName added",
-//                            Toast.LENGTH_SHORT).show()
                         dismiss()
                     }
-                    else{
-//                        Toast.makeText(requireContext(), "Failed to fetch weather data for $cityName",
-//                            Toast.LENGTH_SHORT).show()
-                    }
                 }
-            }else{
-//                Toast.makeText(requireContext(), "Please enter a city name",
-//                    Toast.LENGTH_SHORT).show()
             }
         }
     }

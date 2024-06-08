@@ -1,5 +1,6 @@
 package com.zenfira_cavadova.add.weather_list
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,12 +8,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.zenfira_cavadova.add.R
+import com.zenfira_cavadova.add.WeatherItemClickListener
 import com.zenfira_cavadova.add.databinding.RecyclerWeatherViewBinding
 import com.zenfira_cavadova.domain.entities.WeatherItem
 
-class WeatherAdapter:ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
-
-    var weatherItemClickListener: (WeatherItem) -> Unit = {}
+class WeatherAdapter(private val clickListener: WeatherItemClickListener):ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val binding= RecyclerWeatherViewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
@@ -24,21 +24,19 @@ class WeatherAdapter:ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(
         Log.e("WeatherAdapter", "onBindViewHolder called with item: $item")
         Log.e("WeatherAdapter", "onBindViewHolder called for position: $position with item: $item")
         holder.bindData(item)
-
-//        holder.itemView.findViewById<ImageButton>(R.id.btn_remove).setOnClickListener {
-//        }
     }
     inner class WeatherViewHolder(private val  binding: RecyclerWeatherViewBinding): RecyclerView.ViewHolder(binding.root){
+        @SuppressLint("SetTextI18n")
         fun bindData(item: WeatherItem){
             Log.e("WeatherAdapter", "Binding data for location: ${item.location}")
             binding.temperature.text = "${item.temperature}°"
-            binding.highLowTemp.text = "H:${item.highAndLowTemp.split(' ')[0]} L:${item.highAndLowTemp.split(' ')[1]}"
+            binding.highLowTemp.text = "${item.highAndLowTemp.split(' ')[0]} ${item.highAndLowTemp.split(' ')[1]}"
             binding.location.text = item.location
             binding.weatherIcon.setImageResource(getWeatherIconResource(item.weatherIcon))
             binding.weatherDescription.text = item.weatherDescription
 
             binding.btnRemove.setOnClickListener {
-                weatherItemClickListener(item)
+                clickListener.onRemoveItemClick(item)
             }
         }
     }
@@ -58,10 +56,10 @@ class WeatherAdapter:ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(
 
     fun getWeatherIconResource(iconCode:String):Int{
         return  when (iconCode){
-            "01d"-> R.drawable.ic_clear
-            "02d"->R.drawable.ic_few_clouds
-            "03d"->R.drawable.ic_scattered_clouds
-            "04d"->R.drawable.ic_broken_clouds
+            "01d", "01n"-> R.drawable.ic_clear
+            "02d", "02n"->R.drawable.ic_few_clouds
+            "03d", "03n"->R.drawable.ic_scattered_clouds
+            "04d", "04n"->R.drawable.ic_broken_clouds
             "09d"->R.drawable.ic_shower_rain
             "10d"->R.drawable.ic_rain
             "11d"->R.drawable.ic_thunderstorm

@@ -5,16 +5,13 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.zenfira_cavadova.core.NotificationHelper
-import com.zenfira_cavadova.domain.usecase.GetWeatherUseCase
 import kotlinx.coroutines.delay
 
 class UploadWorker(context: Context, workerParams: WorkerParameters,
-   private val getWeatherUseCase: GetWeatherUseCase
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result {
-        val weatherData = getWeatherUseCase()
-        NotificationHelper.showNotification(applicationContext, "Weather Update", "Current weather: $weatherData")
+        NotificationHelper.showNotification(applicationContext, "Weather Update", "Current weather")
         uploadImages()
         return Result.success()
     }

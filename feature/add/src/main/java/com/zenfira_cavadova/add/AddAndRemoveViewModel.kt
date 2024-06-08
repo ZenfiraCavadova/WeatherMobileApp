@@ -46,13 +46,16 @@ class AddAndRemoveViewModel @Inject constructor(
     fun addWeatherItem(weatherItem: WeatherItem){
         viewModelScope.launch(Dispatchers.IO) {
            addWeatherUseCase(weatherItem)
-
         }
     }
 
     fun removeWeatherItem(weatherItem: WeatherItem){
         viewModelScope.launch(Dispatchers.IO){
             removeWeatherUseCase(weatherItem)
+            val updatedList=getCurrentState().weatherItems?.toMutableList()?.apply {
+                remove(weatherItem)
+            }?: emptyList()
+            _weatherItemsFlow.emit(updatedList)
         }
     }
 
@@ -88,12 +91,13 @@ class AddAndRemoveViewModel @Inject constructor(
                 Log.e("WeatherAPI", "Response: $response")
                 val weatherItem=WeatherItem(
                     temperature = response.main.temp?.toString() ?: "N/A",
-                    highAndLowTemp = "H:${response.main.tepMax} L:${response.main.tepMin}",
+                    highAndLowTemp = "H:${response.main.tempMax} L:${response.main.tempMin}",
                     location = response.location,
                     weatherIcon = response.weather[0].icon ?:"",
                     weatherDescription = response.weather[0].description,
                     windSpeed = response.wind.speed.toString()
                 )
+                Log.e("WeatherAPI", "Main: ${response.main}")
                 onResult(weatherItem)
                 addWeatherItem(weatherItem)
                 _weatherItemsFlow.emit(listOf(weatherItem))

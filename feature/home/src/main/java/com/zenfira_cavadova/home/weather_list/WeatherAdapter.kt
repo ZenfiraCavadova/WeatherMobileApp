@@ -1,5 +1,7 @@
 package com.zenfira_cavadova.home.weather_list
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -22,27 +24,25 @@ class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var 
     inner class WeatherViewHolder(private val  binding: WeatherContainerBinding): RecyclerView.ViewHolder(binding.root){
         fun bindData(item: WeatherItem, temperatureUnit:String, windSpeedUnit:String){
           binding.apply {
-              temperature.text = when(temperatureUnit){
-                  "K"-> item.temperature + " K"
-                  "C"->convertKelvinToCelsius(item.temperature) + " °C"
-                  "F"->convertKelvinToFahrenheit(item.temperature) + " °F"
-                  else ->"N/A"
-              }
+              val temp =convertTemp(item.temperature,temperatureUnit)
+              temperature.text="$temp $temperatureUnit"
               val highTempKelvin =item.highAndLowTemp.split(' ')[0]
               val lowTempKelvin =item.highAndLowTemp.split(' ')[1]
-              val highTemp =when (temperatureUnit){
-                  "K"-> highTempKelvin + " K"
-                  "C"->convertKelvinToCelsius(highTempKelvin) + " °C"
-                  "F"->convertKelvinToFahrenheit(highTempKelvin)+" °F"
-                  else ->"N/A"
-              }
-              val lowTemp =when (temperatureUnit){
-                  "K"-> lowTempKelvin + " K"
-                  "C"->convertKelvinToCelsius(lowTempKelvin) + " °C"
-                  "F"->convertKelvinToFahrenheit(lowTempKelvin)+" °F"
-                  else ->"N/A"
-              }
-              highLowTemp.text = "$highTemp and $lowTemp"
+              val highTemp=convertTemp(highTempKelvin,temperatureUnit)
+              val lowTemp=convertTemp(lowTempKelvin,temperatureUnit)
+              Log.e("AAAAAAAAAAAAAAAAAAAA","$highTemp $lowTemp $highTempKelvin $lowTempKelvin" )
+              highLowTemp.text="$highTempKelvin $lowTempKelvin"
+//              val highAndLowTempParts = item.highAndLowTemp.trim().split(' ')
+//              if (highAndLowTempParts.size == 4 && highAndLowTempParts[0] == "H:" && highAndLowTempParts[2] == "L:") {
+//                  val highTempKelvin = highAndLowTempParts[1]
+//                  val lowTempKelvin = highAndLowTempParts[3]
+//                  val highTemp = convertTemp(highTempKelvin, temperatureUnit)
+//                  val lowTemp = convertTemp(lowTempKelvin, temperatureUnit)
+//                  highLowTemp.text = "$highTemp $lowTemp"
+//              } else {
+//                  Log.e("WeatherAdapter", "Invalid highAndLowTemp format: ${item.highAndLowTemp}")
+//              }
+
               location.text = item.location
               binding.weatherIcon.setImageResource(getWeatherIconResource(item.weatherIcon))
               weatherDescription.text = item.weatherDescription
@@ -50,7 +50,25 @@ class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var 
                   onItemClicked(item)
               }
           }
+        }
+    }
 
+    @SuppressLint("DefaultLocale")
+    fun convertTemp(temp: String?, unit: String): String {
+        return if (temp != null) {
+            try {
+                val tempValue = temp.toDouble()
+                when (unit) {
+                    "K" -> String.format("%.2f", tempValue)
+                    "C" -> String.format("%.2f", tempValue - 273.15)
+                    "F" -> String.format("%.2f", (tempValue - 273.15) * 9 / 5 + 32)
+                    else -> "N/A"
+                }
+            } catch (e: NumberFormatException) {
+                "N/A"
+            }
+        } else {
+            "N/A"
         }
     }
 
@@ -59,47 +77,6 @@ class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var 
         windSpeedUnit=newWindSpeedUnit
         notifyDataSetChanged()
     }
-    private fun convertKelvinToCelsius(temperatureInKelvin: String): String {
-        // Conversion logic from Kelvin to Celsius: C = K - 273.15
-        val temperatureInKelvinFloat = temperatureInKelvin.toFloatOrNull()
-        return if (temperatureInKelvinFloat != null) {
-            val temperatureInCelsius = temperatureInKelvinFloat - 273.15
-            String.format("%.2f", temperatureInCelsius)
-        } else {
-            "N/A"
-        }
-    }
-
-    private fun convertKelvinToFahrenheit(temperatureInKelvin: String): String {
-        val temperatureInKelvinFloat = temperatureInKelvin.toFloatOrNull()
-        return if (temperatureInKelvinFloat != null) {
-            val temperatureInFahrenheit = (temperatureInKelvinFloat - 273.15) * 9/5 + 32
-            String.format("%.2f", temperatureInFahrenheit)
-        } else {
-            "N/A"
-        }
-    }
-
-    private fun convertMetersPerSecToKmPerHour(windSpeedInMetersPerSec: String): String {
-        val windSpeedInMetersPerSecFloat = windSpeedInMetersPerSec.toFloatOrNull()
-        return if (windSpeedInMetersPerSecFloat != null) {
-            val windSpeedInKmPerHour = windSpeedInMetersPerSecFloat * 3.6
-            String.format("%.2f", windSpeedInKmPerHour)
-        } else {
-            "N/A"
-        }
-    }
-
-    private fun convertMetersPerSecToMilesPerHour(windSpeedInMetersPerSec: String): String {
-        val windSpeedInMetersPerSecFloat = windSpeedInMetersPerSec.toFloatOrNull()
-        return if (windSpeedInMetersPerSecFloat != null) {
-            val windSpeedInMilesPerHour = windSpeedInMetersPerSecFloat * 2.237
-            String.format("%.2f", windSpeedInMilesPerHour)
-        } else {
-            "N/A"
-        }
-    }
-
     private class WeatherDiffCallback : DiffUtil.ItemCallback<WeatherItem>() {
         override fun areItemsTheSame(oldItem: WeatherItem, newItem: WeatherItem): Boolean {
             return oldItem == newItem
@@ -116,10 +93,10 @@ class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var 
 
     fun getWeatherIconResource(iconCode:String):Int{
         return  when (iconCode){
-            "01d"-> R.drawable.ic_clear
-            "02d"->R.drawable.ic_few_clouds
-            "03d"->R.drawable.ic_scattered_clouds
-            "04d"->R.drawable.ic_broken_clouds
+            "01d", "01n"-> R.drawable.ic_clear
+            "02d", "02n"->R.drawable.ic_few_clouds
+            "03d", "03n"->R.drawable.ic_scattered_clouds
+            "04d", "04n"->R.drawable.ic_broken_clouds
             "09d"->R.drawable.ic_shower_rain
             "10d"->R.drawable.ic_rain
             "11d"->R.drawable.ic_thunderstorm

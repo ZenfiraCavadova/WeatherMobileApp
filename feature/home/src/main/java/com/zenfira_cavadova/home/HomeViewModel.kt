@@ -6,10 +6,12 @@ import com.zenfira_cavadova.core.BaseViewModel
 import com.zenfira_cavadova.data.api.NetworkManager
 import com.zenfira_cavadova.data.api.WeatherService
 import com.zenfira_cavadova.domain.entities.WeatherItem
+import com.zenfira_cavadova.domain.usecase.AddWeatherUseCase
 import com.zenfira_cavadova.domain.usecase.GetWeatherUseCase
 import com.zenfira_cavadova.domain.usecase.RemoveWeatherUseCase
 import com.zenfira_cavadova.settings.SettingsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -22,6 +24,7 @@ import kotlin.math.roundToInt
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     getWeatherItemsUseCase: GetWeatherUseCase,
+    private val addWeatherUseCase: AddWeatherUseCase,
     private val removeWeatherUseCase: RemoveWeatherUseCase
 )  : BaseViewModel<HomeState,HomeEffect,HomeEvent>() {
     private lateinit var settingsViewModel: SettingsViewModel
@@ -38,15 +41,30 @@ class HomeViewModel @Inject constructor(
                            weatherItems = currentDatabaseValue
                        )
                )
-
                }.launchIn(viewModelScope)
 
     }
-//    fun addWeatherItem(weatherItem: WeatherItem){
-//        viewModelScope.launch(Dispatchers.IO) {
-//            weatherRepository.addWeatherItem(weatherItem)
-//        }
-//    }
+    fun addWeatherItem(weatherItem: WeatherItem){
+        viewModelScope.launch(Dispatchers.IO) {
+            addWeatherUseCase(weatherItem)
+        }
+    }
+
+    fun saveWeather(temperature: String, highAndLowTemp: String,location: String, weatherIcon: String, weatherDescription: String, windSpeed:String){
+        val weatherItem=WeatherItem(
+            temperature = temperature,
+            highAndLowTemp = highAndLowTemp,
+            location =location,
+            weatherIcon = weatherIcon,
+            weatherDescription = weatherDescription,
+            windSpeed =windSpeed
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            addWeatherUseCase(weatherItem)
+        }
+        addWeatherItem(weatherItem)
+        postEffect(HomeEffect.OnWeatherAdded)
+    }
     fun fetchWeatherForCity(cityName:String){
         viewModelScope.launch {
             try {
@@ -54,13 +72,15 @@ class HomeViewModel @Inject constructor(
                 Log.e("WeatherAPI", "Response: $response")
                 val temperatureUnit = settingsViewModel.temperatureUnit.value
                 val windSpeedUnit = settingsViewModel.windSpeedUnit.value
+
+                Log.e("WeatherAPI", "Main: ${response.main}")
                 val tempInKelvin =response.main.temp ?: 0.0
-                val highTempInKelvin =response.main.tepMax ?:0.0
-                val lowTempInKelvin=response.main.tepMin ?:0.0
+                val highTempInKelvin =response.main.tempMax ?:0.0
+                val lowTempInKelvin=response.main.tempMin ?:0.0
                 val windSpeedInMetersPerSec=response.wind.speed ?: 0.0
                 val highTemp = when(temperatureUnit){
-                    "K"->"${highTempInKelvin.roundToInt()} K"
-                    "C"->"${(highTempInKelvin-273.15).roundToInt()} °C"
+                    "K"->"${highTempInKelvin.roundToInt()}"
+                    "C"->"${(highTempInKelvin-273.15).roundToInt()}"
                     "F"->"${((highTempInKelvin - 273.15) * 9 / 5 + 32).roundToInt()}°F"
                     else ->"N/A"
                 }

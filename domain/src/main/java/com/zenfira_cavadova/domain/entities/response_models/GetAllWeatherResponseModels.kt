@@ -13,12 +13,12 @@ data class GetAllWeatherResponseModels(
     val wind:Wind
 ){
     data class Main(
-        @SerializedName("temperature")
+        @SerializedName("temp")
         val temp: Double?,
         @SerializedName("temp_min")
-        val tepMin:Double,
+        val tempMin:Double,
         @SerializedName("temp_max")
-        val tepMax:Double
+        val tempMax:Double
     )
 
     data class Weather(

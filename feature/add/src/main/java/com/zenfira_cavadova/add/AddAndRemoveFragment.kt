@@ -15,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AddAndRemoveFragment : BaseFragment<FragmentAddAndRemoveBinding, AddAndRemoveViewModel,AddState, AddEffect,AddEvent>(),WeatherItemClickListener {
-    private val adapter: WeatherAdapter = WeatherAdapter()
+    private val adapter: WeatherAdapter = WeatherAdapter(this)
 
     override fun getViewModelClass()=AddAndRemoveViewModel::class.java
 
@@ -29,7 +29,6 @@ class AddAndRemoveFragment : BaseFragment<FragmentAddAndRemoveBinding, AddAndRem
         Log.e("AddAndRemoveFragment", "RecyclerView $adapter set")
         binding.weatherList.adapter=adapter
         binding.weatherList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
 
         binding.fabAddCity.setOnClickListener {
             showBottomSheetDialog()
@@ -47,14 +46,9 @@ class AddAndRemoveFragment : BaseFragment<FragmentAddAndRemoveBinding, AddAndRem
     override fun onStateUpdate(state: AddState) {
         when{
             state.isLoading -> {
-
             }
-
             else -> {
                 adapter.submitList(state.weatherItems)
-                adapter.weatherItemClickListener = {
-
-                }
             }
         }
     }

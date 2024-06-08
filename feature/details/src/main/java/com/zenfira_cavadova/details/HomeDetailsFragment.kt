@@ -42,10 +42,10 @@ class HomeDetailsFragment : BaseFragment<FragmentDetailsBinding,DetailsViewModel
     }
     fun getWeatherIconResource(iconCode:String):Int{
         return  when (iconCode){
-            "01d"-> R.drawable.ic_clear
-            "02d"->R.drawable.ic_few_clouds
-            "03d"->R.drawable.ic_scattered_clouds
-            "04d"->R.drawable.ic_broken_clouds
+            "01d", "01n"-> R.drawable.ic_clear
+            "02d", "02n"->R.drawable.ic_few_clouds
+            "03d", "03n"->R.drawable.ic_scattered_clouds
+            "04d", "04n"->R.drawable.ic_broken_clouds
             "09d"->R.drawable.ic_shower_rain
             "10d"->R.drawable.ic_rain
             "11d"->R.drawable.ic_thunderstorm
