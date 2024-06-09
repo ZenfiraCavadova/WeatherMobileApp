@@ -57,17 +57,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel,HomeState,Ho
         binding.weatherList.adapter=adapter
 
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            settingsViewModel.temperatureUnit.collect { unit ->
-                adapter?.updateUnits(settingsViewModel.temperatureUnit.value, unit)
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            settingsViewModel.windSpeedUnit.collect { unit ->
-                adapter?.updateUnits(settingsViewModel.windSpeedUnit.value, unit)
-            }
-        }
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            settingsViewModel.temperatureUnit.collect { unit ->
+//                adapter?.updateUnits(settingsViewModel.temperatureUnit.value, unit)
+//            }
+//        }
+//
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            settingsViewModel.windSpeedUnit.collect { unit ->
+//                adapter?.updateUnits(settingsViewModel.windSpeedUnit.value, unit)
+//            }
+//        }
     }
 
     override fun updateUnits(temperatureUnit: String, windSpeedUnit: String) {

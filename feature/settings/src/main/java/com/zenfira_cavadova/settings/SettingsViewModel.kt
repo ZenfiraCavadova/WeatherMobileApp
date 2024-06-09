@@ -41,7 +41,7 @@ class SettingsViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _temperatureUnit.collect { newTempUnit ->
-                weatherUnitUpdateListener?.updateUnits(newTempUnit, temperatureUnit.value)
+                weatherUnitUpdateListener?.updateUnits(newTempUnit, windSpeedUnit.value)
             }
 
             _windSpeedUnit.collect { newWindSpeedUnit ->
