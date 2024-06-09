@@ -9,7 +9,7 @@
         android:id="@+id/inputCityName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter City Name"
+        android:hint="@string/enter_city"
         android:inputType="text"/>
 
     <TextView
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Favorite Cities"
+        android:text="@string/fav_cities"
         android:textStyle="bold"/>
 
     <ListView
@@ -31,6 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Add City"/>
+        android:text="@string/add"/>
 
 </LinearLayout>

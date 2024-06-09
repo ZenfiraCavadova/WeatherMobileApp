@@ -8,7 +8,6 @@ import com.zenfira_cavadova.data.api.WeatherService
 import com.zenfira_cavadova.domain.entities.WeatherItem
 import com.zenfira_cavadova.domain.usecase.AddWeatherUseCase
 import com.zenfira_cavadova.domain.usecase.GetWeatherUseCase
-import com.zenfira_cavadova.domain.usecase.RemoveWeatherUseCase
 import com.zenfira_cavadova.settings.SettingsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,14 +17,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     getWeatherItemsUseCase: GetWeatherUseCase,
-    private val addWeatherUseCase: AddWeatherUseCase,
-    private val removeWeatherUseCase: RemoveWeatherUseCase
+    private val addWeatherUseCase: AddWeatherUseCase
 )  : BaseViewModel<HomeState,HomeEffect,HomeEvent>() {
     private lateinit var settingsViewModel: SettingsViewModel
 //    private val weatherRepository = WeatherRepositoryImpl()
@@ -49,6 +46,16 @@ class HomeViewModel @Inject constructor(
             addWeatherUseCase(weatherItem)
         }
     }
+    override  fun onEventUpdate(event: HomeEvent) {
+        when (event){
+            is HomeEvent.SaveWeather ->saveWeather(
+                event.location,event.highAndLowTemp,event.temperature,
+                event.weatherIcon.toString(),event.weatherDescription, event.windSpeed
+            )
+
+            else -> {}
+        }
+    }
 
     fun saveWeather(temperature: String, highAndLowTemp: String,location: String, weatherIcon: String, weatherDescription: String, windSpeed:String){
         val weatherItem=WeatherItem(
@@ -70,43 +77,14 @@ class HomeViewModel @Inject constructor(
             try {
                 val response=weatherService.getWeatherForecast(cityName)
                 Log.e("WeatherAPI", "Response: $response")
-                val temperatureUnit = settingsViewModel.temperatureUnit.value
-                val windSpeedUnit = settingsViewModel.windSpeedUnit.value
-
-                Log.e("WeatherAPI", "Main: ${response.main}")
-                val tempInKelvin =response.main.temp ?: 0.0
-                val highTempInKelvin =response.main.tempMax ?:0.0
-                val lowTempInKelvin=response.main.tempMin ?:0.0
-                val windSpeedInMetersPerSec=response.wind.speed ?: 0.0
-                val highTemp = when(temperatureUnit){
-                    "K"->"${highTempInKelvin.roundToInt()}"
-                    "C"->"${(highTempInKelvin-273.15).roundToInt()}"
-                    "F"->"${((highTempInKelvin - 273.15) * 9 / 5 + 32).roundToInt()}°F"
-                    else ->"N/A"
-                }
-                val lowTemp = when(temperatureUnit){
-                    "K"->"${lowTempInKelvin.roundToInt()} K"
-                    "C"->"${(lowTempInKelvin-273.15).roundToInt()} °C"
-                    "F"->"${((lowTempInKelvin - 273.15) * 9 / 5 + 32).roundToInt()}°F"
-                    else ->"N/A"
-                }
-                val weatherItem= WeatherItem(
-                    temperature = when(temperatureUnit){
-                        "K"->"${tempInKelvin.roundToInt()} K"
-                        "C"->"${(tempInKelvin-273.15).roundToInt()} °C"
-                        "F"->"${((tempInKelvin - 273.15) * 9 / 5 + 32).roundToInt()}°F"
-                        else ->"N/A"
-                                                       },
-
-                    highAndLowTemp = "H:$highTemp L:$lowTemp",
+                val weatherItem=WeatherItem(
+                    temperature = response.main.temp?.toString() ?: "N/A",
+                    highAndLowTemp = "H:${response.main.tempMax} L:${response.main.tempMin}",
                     location = response.location,
                     weatherIcon = response.weather[0].icon ?:"",
                     weatherDescription = response.weather[0].description,
-                    windSpeed = when(windSpeedUnit){
-                        "mph"->"${(windSpeedInMetersPerSec* 2.23694).roundToInt()} mph"
-                        "km/h" ->"${(windSpeedInMetersPerSec*3.6).roundToInt()} km/h"
-                        else ->"N/A"
-                    }
+                    windSpeed = response.wind.speed.toString()
+
                 )
                 _weatherItemsFlow.emit(listOf(weatherItem))
             }catch (e:Exception){

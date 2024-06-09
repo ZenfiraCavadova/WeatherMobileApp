@@ -20,7 +20,7 @@
         android:ems="10"
         android:inputType="text"
         android:textColor="@color/black"
-        android:textColorHint="@color/dark_grey"
+        android:textColorHint="@color/black"
         android:textSize="20sp"
         android:gravity="center_vertical"/>
 

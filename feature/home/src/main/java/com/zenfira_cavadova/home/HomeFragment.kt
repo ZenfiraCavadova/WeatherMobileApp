@@ -40,11 +40,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel,HomeState,Ho
         binding.searchInp.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (!query.isNullOrEmpty()){
-                  viewModel.fetchWeatherForCity(query)
+                    binding.searchInp.clearFocus()
+                    viewModel.fetchWeatherForCity(query)
                 }
                 return true
             }
             override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let { query ->
+                    adapter!!.filterWeather(query)
+                }
                 return true
             }
         })
@@ -57,12 +61,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel,HomeState,Ho
             }
         }
     }
+
     override fun updateUnits(temperatureUnit: String, windSpeedUnit: String) {
         adapter?.updateUnits(temperatureUnit, windSpeedUnit)
     }
 
     override fun onStateUpdate(state: HomeState) {
-        adapter?.submitList(state.weatherItems)
+        state.weatherItems?.let { adapter?.submitAll(it) }
 
     }
 }

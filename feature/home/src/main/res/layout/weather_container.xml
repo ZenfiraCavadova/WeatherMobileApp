@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@drawable/gradient_background"
     android:padding="32dp"
@@ -19,7 +20,7 @@
                 android:id="@+id/temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="19°"
+                tools:text="19°"
                 android:textStyle="bold"
                 android:textSize="32sp"
                 android:textColor="@color/white"/>
@@ -31,14 +32,14 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/grey"
-                android:text="H:18 L:16"/>
+                tools:text="H:18 L:16"/>
             <TextView
                 android:id="@+id/location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="12sp"
-                android:text="Baku, Azerbaijan"/>
+                tools:text="Baku, Azerbaijan"/>
         </LinearLayout>
 
         <View
@@ -61,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="10sp"
-                android:text="Sunny"/>
+                tools:text="Sunny"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

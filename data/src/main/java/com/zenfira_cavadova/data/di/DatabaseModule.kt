@@ -24,9 +24,6 @@ object DatabaseModule {
             context,
             AppDatabase::class.java, "weather_database"
         )
-//            .addMigrations(
-//                Migrations.MIGRATION_1_2
-//            )
             .build()
     }
 

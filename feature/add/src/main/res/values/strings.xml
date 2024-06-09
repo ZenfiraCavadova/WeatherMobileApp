@@ -1,4 +1,8 @@
 <resources>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add">Add city</string>
+    <string name="fav_cities">Favorite Cities</string>
+    <string name="enter_city">Enter City Name</string>
+
 </resources>

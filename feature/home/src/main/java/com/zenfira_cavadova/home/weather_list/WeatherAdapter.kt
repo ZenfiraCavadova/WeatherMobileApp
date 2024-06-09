@@ -12,6 +12,11 @@ import com.zenfira_cavadova.home.R
 import com.zenfira_cavadova.home.databinding.WeatherContainerBinding
 
 class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var temperatureUnit: String, private var windSpeedUnit: String):ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
+    private var allWeatherItem: List<WeatherItem> = emptyList()
+    init {
+        allWeatherItem= mutableListOf()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val view=WeatherContainerBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return WeatherViewHolder(view)
@@ -75,7 +80,7 @@ class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var 
     fun updateUnits(newTempUnit:String, newWindSpeedUnit:String){
         temperatureUnit=newTempUnit
         windSpeedUnit=newWindSpeedUnit
-        notifyDataSetChanged()
+//        notifyDataSetChanged()
     }
     private class WeatherDiffCallback : DiffUtil.ItemCallback<WeatherItem>() {
         override fun areItemsTheSame(oldItem: WeatherItem, newItem: WeatherItem): Boolean {
@@ -104,5 +109,16 @@ class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var 
             "50d"->R.drawable.ic_mist
             else-> R.drawable.ic_few_clouds
         }
+    }
+
+    fun submitAll(weatherItems: List<WeatherItem>) {
+        allWeatherItem = weatherItems
+        submitList(allWeatherItem)
+    }
+    fun filterWeather(query: String) {
+        val filteredNotes = allWeatherItem.filter {weatherItem ->
+            weatherItem.location.contains(query, ignoreCase = true)
+        }
+        submitList(filteredNotes)
     }
 }
