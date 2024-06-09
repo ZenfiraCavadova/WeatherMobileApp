@@ -80,7 +80,7 @@ class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var 
     fun updateUnits(newTempUnit:String, newWindSpeedUnit:String){
         temperatureUnit=newTempUnit
         windSpeedUnit=newWindSpeedUnit
-//        notifyDataSetChanged()
+        notifyDataSetChanged()
     }
     private class WeatherDiffCallback : DiffUtil.ItemCallback<WeatherItem>() {
         override fun areItemsTheSame(oldItem: WeatherItem, newItem: WeatherItem): Boolean {

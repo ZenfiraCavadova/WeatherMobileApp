@@ -4,11 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.viewModelScope
 import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.OneTimeWorkRequest
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import androidx.work.WorkRequest
 import com.zenfira_cavadova.core.BaseViewModel
 import com.zenfira_cavadova.domain.usecase.GetWeatherUseCase
 import com.zenfira_cavadova.domain.usecase.RemoveWeatherUseCase
@@ -44,11 +41,11 @@ class SettingsViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _temperatureUnit.collect { newTempUnit ->
-                weatherUnitUpdateListener?.updateUnits(newTempUnit, windSpeedUnit.value)
+                weatherUnitUpdateListener?.updateUnits(newTempUnit, temperatureUnit.value)
             }
 
             _windSpeedUnit.collect { newWindSpeedUnit ->
-                weatherUnitUpdateListener?.updateUnits(temperatureUnit.value, newWindSpeedUnit)
+                weatherUnitUpdateListener?.updateUnits(windSpeedUnit.value, newWindSpeedUnit)
             }
         }
     }

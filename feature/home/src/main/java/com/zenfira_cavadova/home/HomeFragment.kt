@@ -11,6 +11,7 @@ import com.zenfira_cavadova.core.BaseFragment
 import com.zenfira_cavadova.home.databinding.FragmentHomeBinding
 import com.zenfira_cavadova.home.weather_list.WeatherAdapter
 import com.zenfira_cavadova.settings.SettingsViewModel
+import com.zenfira_cavadova.settings.WeatherUnitUpdateListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -29,6 +30,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel,HomeState,Ho
         super.onViewCreated(view, savedInstanceState)
 
         settingsViewModel = ViewModelProvider(requireActivity()).get(SettingsViewModel::class.java)
+        settingsViewModel.setHomeFragmentListener(this)
         adapter= WeatherAdapter(
             onItemClicked = {weatherItem ->
                 val action=HomeFragmentDirections.actionHomeFragmentToDetailsNavGraph(weatherItem)
@@ -58,6 +60,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel,HomeState,Ho
         viewLifecycleOwner.lifecycleScope.launch {
             settingsViewModel.temperatureUnit.collect { unit ->
                 adapter?.updateUnits(settingsViewModel.temperatureUnit.value, unit)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            settingsViewModel.windSpeedUnit.collect { unit ->
+                adapter?.updateUnits(settingsViewModel.windSpeedUnit.value, unit)
             }
         }
     }
