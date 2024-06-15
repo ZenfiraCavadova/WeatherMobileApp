@@ -20,4 +20,25 @@ object LocaleHelper {
         val locale= locales.get(0) ?: Locale.getDefault()
         return locale.language
     }
+
+    fun updateResources(context: Context,language: String):Context{
+        val locale=Locale(language)
+        Locale.setDefault(locale)
+        val resources=context.resources
+        val configuration=resources.configuration
+        configuration.setLocale(locale)
+        configuration.setLayoutDirection(locale)
+
+        return context.createConfigurationContext(configuration)
+    }
+
+
+    fun applyLocale(context: Context,language: String){
+        updateResources(context,language)
+        val appContext=context.applicationContext
+        if (context !=appContext){
+            updateResources(appContext,language)
+        }
+    }
+
 }

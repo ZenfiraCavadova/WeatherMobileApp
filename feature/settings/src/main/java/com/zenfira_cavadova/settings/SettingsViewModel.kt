@@ -2,6 +2,7 @@ package com.zenfira_cavadova.settings
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
@@ -14,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -24,7 +26,7 @@ class SettingsViewModel @Inject constructor(
     private val removeWeatherUseCase: RemoveWeatherUseCase
 ) :BaseViewModel<SettingsState,SettingsEffect,SettingsEvent>() {
     private val _temperatureUnit= MutableStateFlow("K")
-    val temperatureUnit:StateFlow<String> get()=_temperatureUnit
+    val temperatureUnit:StateFlow<String> =_temperatureUnit
 
     private val _windSpeedUnit=MutableStateFlow("mph")
     val windSpeedUnit:StateFlow<String> get()=_windSpeedUnit
@@ -35,27 +37,36 @@ class SettingsViewModel @Inject constructor(
     private val _updateWeather=MutableStateFlow(false)
     val updateWeather:StateFlow<Boolean> get()=_updateWeather
 
+    private val _selectedTemperatureUnit= MutableStateFlow<String?>(null)
+    val selectedTemperatureUnit:StateFlow<String?> =_selectedTemperatureUnit
+
     private lateinit var sharedPreferences: SharedPreferences
     private var weatherUnitUpdateListener: WeatherUnitUpdateListener? = null
 
     init {
         viewModelScope.launch {
             _temperatureUnit.collect { newTempUnit ->
-                weatherUnitUpdateListener?.updateUnits(newTempUnit, windSpeedUnit.value)
-            }
+               if (newTempUnit != _temperatureUnit.value){
+                   weatherUnitUpdateListener?.updateUnits(newTempUnit, windSpeedUnit.value)
+                   Log.e("UNITSETTINGSS","UNITSETTINGSS: ${newTempUnit}")
+               }
 
+            }
             _windSpeedUnit.collect { newWindSpeedUnit ->
-                weatherUnitUpdateListener?.updateUnits(windSpeedUnit.value, newWindSpeedUnit)
+                if (newWindSpeedUnit != _windSpeedUnit.value){
+                    weatherUnitUpdateListener?.updateUnits(temperatureUnit.value, newWindSpeedUnit)
+                    Log.e("UNITSETTINGSS","UNITSETTINGSS: $newWindSpeedUnit")
+                }
             }
         }
     }
 
-    fun setHomeFragmentListener(listener: WeatherUnitUpdateListener) {
+    fun setFragmentListener(listener: WeatherUnitUpdateListener) {
         weatherUnitUpdateListener = listener
     }
      fun loadSettings(sharedPreferences: SharedPreferences) {
         this.sharedPreferences=sharedPreferences
-      viewModelScope.launch(Dispatchers.IO){
+         viewModelScope.launch(Dispatchers.IO){
           _temperatureUnit.value=sharedPreferences.getString("temperature_unit","K") ?:"K"
           _windSpeedUnit.value=sharedPreferences.getString("wind_speed_unit","mph") ?:"mph"
           _language.value=sharedPreferences.getString("language","English") ?:"English"
@@ -64,14 +75,15 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun setTemperatureUnit(unit:String){
-            _temperatureUnit.value = unit
-            sharedPreferences.edit().putString("temperature_unit", unit).apply()
+        _temperatureUnit.value = unit
+//        _selectedTemperatureUnit.value=unit
+        sharedPreferences.edit().putString("temperature_unit", unit).apply()
 
     }
 
     fun setWindSpeedUnit(unit:String){
-            _windSpeedUnit.value = unit
-            sharedPreferences.edit().putString("wind_speed_unit", unit).apply()
+        _windSpeedUnit.value = unit
+        sharedPreferences.edit().putString("wind_speed_unit", unit).apply()
     }
 
     fun setLanguage(lang:String){

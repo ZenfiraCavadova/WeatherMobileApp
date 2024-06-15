@@ -43,8 +43,6 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":core"))
     implementation("androidx.hilt:hilt-common:1.2.0")
-//    implementation(project(":feature:home"))
-//    implementation(project(":feature:add"))
 
     val navigationVersion = "2.5.3"
     implementation("androidx.core:core-ktx:1.9.0")

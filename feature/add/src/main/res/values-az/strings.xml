@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_city">Şəhər əlavə et</string>
+    <string name="fav_cities">Sevimli Şəhərlər</string>
+    <string name="enter_city">Şəhər adını daxil edin</string>
+</resources>

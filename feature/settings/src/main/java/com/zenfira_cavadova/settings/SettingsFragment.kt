@@ -17,7 +17,6 @@ import com.zenfira_cavadova.settings.databinding.FragmentSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Locale
 import javax.inject.Inject
 
 
@@ -66,7 +65,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding,SettingsViewModel,
                     val position = it.getPosition(unit)
                     binding.tempSpinner.setSelection(position)
                 }
-
             }
         }
 
@@ -165,10 +163,11 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding,SettingsViewModel,
         }
         if (LocaleHelper.getLocale(requireContext())!= langCode){
             LocaleHelper.setLocale(requireContext(),langCode)
-            val configuration =resources.configuration
-            configuration.setLocale(Locale(langCode))
-            resources.updateConfiguration(configuration, resources.displayMetrics)
+            LocaleHelper.updateResources(requireContext(),langCode)
             Log.e("SettingsFragment", "Locale updated to $langCode")
+            activity?.let {
+                it.recreate()
+            }
         }
     }
 

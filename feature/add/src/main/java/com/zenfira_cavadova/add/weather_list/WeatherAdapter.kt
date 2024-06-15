@@ -12,8 +12,8 @@ import com.zenfira_cavadova.add.WeatherItemClickListener
 import com.zenfira_cavadova.add.databinding.RecyclerWeatherViewBinding
 import com.zenfira_cavadova.domain.entities.WeatherItem
 
-class WeatherAdapter(private val clickListener: WeatherItemClickListener):ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
-
+class WeatherAdapter(private val clickListener: WeatherItemClickListener, private var temperatureUnit: String):ListAdapter<WeatherItem, WeatherAdapter.WeatherViewHolder>(WeatherDiffCallback()) {
+    private var allWeatherItem: List<WeatherItem> = emptyList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val binding= RecyclerWeatherViewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return WeatherViewHolder(binding)
@@ -21,16 +21,33 @@ class WeatherAdapter(private val clickListener: WeatherItemClickListener):ListAd
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
         val item=getItem(position)
-        Log.e("WeatherAdapter", "onBindViewHolder called with item: $item")
-        Log.e("WeatherAdapter", "onBindViewHolder called for position: $position with item: $item")
-        holder.bindData(item)
+        holder.bindData(item,temperatureUnit)
     }
     inner class WeatherViewHolder(private val  binding: RecyclerWeatherViewBinding): RecyclerView.ViewHolder(binding.root){
         @SuppressLint("SetTextI18n")
-        fun bindData(item: WeatherItem){
+        fun bindData(item: WeatherItem, temperatureUnit:String){
             Log.e("WeatherAdapter", "Binding data for location: ${item.location}")
-            binding.temperature.text = "${item.temperature}°"
-            binding.highLowTemp.text = "${item.highAndLowTemp.split(' ')[0]} ${item.highAndLowTemp.split(' ')[1]}"
+//            binding.temperature.text = "${item.temperature}°"
+//            binding.highLowTemp.text = "${item.highAndLowTemp.split(' ')[0]} ${item.highAndLowTemp.split(' ')[1]}"
+            val temp =convertTemp(item.temperature,temperatureUnit)
+            binding.temperature.text="$temp $temperatureUnit"
+            val highTempKelvin =item.highAndLowTemp.split(' ')[0]
+            Log.e("UNITTTTT","UNIT: $temp tempp  changingvggggggggg")
+            val lowTempKelvin =item.highAndLowTemp.split(' ')[1]
+            val highTemp=convertTemp(highTempKelvin,temperatureUnit)
+            val lowTemp=convertTemp(lowTempKelvin,temperatureUnit)
+            Log.e("AAAAAAAAAAAAAAAAAAAA","$highTemp $lowTemp $highTempKelvin $lowTempKelvin" )
+            binding.highLowTemp.text="$highTempKelvin $lowTempKelvin"
+//              val highAndLowTempParts = item.highAndLowTemp.trim().split(' ')
+//              if (highAndLowTempParts.size == 4 && highAndLowTempParts[0] == "H:" && highAndLowTempParts[2] == "L:") {
+//                  val highTempKelvin = highAndLowTempParts[1]
+//                  val lowTempKelvin = highAndLowTempParts[3]
+//                  val highTemp = convertTemp(highTempKelvin, temperatureUnit)
+//                  val lowTemp = convertTemp(lowTempKelvin, temperatureUnit)
+//                  highLowTemp.text = "$highTemp $lowTemp"
+//              } else {
+//                  Log.e("WeatherAdapter", "Invalid highAndLowTemp format: ${item.highAndLowTemp}")
+//              }
             binding.location.text = item.location
             binding.weatherIcon.setImageResource(getWeatherIconResource(item.weatherIcon))
             binding.weatherDescription.text = item.weatherDescription
@@ -40,6 +57,31 @@ class WeatherAdapter(private val clickListener: WeatherItemClickListener):ListAd
             }
         }
     }
+    @SuppressLint("DefaultLocale")
+    fun convertTemp(temp: String?, unit: String): String {
+        Log.e("UNITTTTT","UNIT: $unit changingvggggggggg")
+        return if (temp != null) {
+            try {
+                val tempValue = temp.toDouble()
+                when (unit) {
+                    "K" -> String.format("%.2f", tempValue)
+                    "C" -> String.format("%.2f", tempValue - 273.15)
+                    "F" -> String.format("%.2f", (tempValue - 273.15) * 9 / 5 + 32)
+                    else -> "N/A"
+                }
+            } catch (e: NumberFormatException) {
+                "N/A"
+            }
+        } else {
+            "N/A"
+        }
+    }
+
+    fun updateUnit(tempUnit:String){
+        this.temperatureUnit=tempUnit
+        notifyDataSetChanged()
+    }
+
     private class WeatherDiffCallback : DiffUtil.ItemCallback<WeatherItem>() {
         override fun areItemsTheSame(oldItem: WeatherItem, newItem: WeatherItem): Boolean {
             return oldItem == newItem
@@ -67,5 +109,9 @@ class WeatherAdapter(private val clickListener: WeatherItemClickListener):ListAd
             "50d"->R.drawable.ic_mist
             else-> R.drawable.ic_few_clouds
         }
+    }
+    fun submitAll(weatherItems: List<WeatherItem>) {
+        allWeatherItem = weatherItems
+        submitList(allWeatherItem)
     }
 }

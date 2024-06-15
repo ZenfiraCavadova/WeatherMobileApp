@@ -2,6 +2,7 @@ package com.zenfira_cavadova.weatherapp
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -37,6 +38,11 @@ class MainActivity : AppCompatActivity() {
         initNavigation()
         askNotificationPermission()
         DatabaseManager.initDatabase(this)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        LocaleHelper.updateResources(this,LocaleHelper.getLocale(this))
     }
 
     private fun askNotificationPermission() {

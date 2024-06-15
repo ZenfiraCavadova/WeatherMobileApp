@@ -32,6 +32,7 @@ class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var 
               val temp =convertTemp(item.temperature,temperatureUnit)
               temperature.text="$temp $temperatureUnit"
               val highTempKelvin =item.highAndLowTemp.split(' ')[0]
+              Log.e("UNITTTTT","UNIT: $temp tempp  changingvggggggggg")
               val lowTempKelvin =item.highAndLowTemp.split(' ')[1]
               val highTemp=convertTemp(highTempKelvin,temperatureUnit)
               val lowTemp=convertTemp(lowTempKelvin,temperatureUnit)
@@ -60,6 +61,7 @@ class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var 
 
     @SuppressLint("DefaultLocale")
     fun convertTemp(temp: String?, unit: String): String {
+        Log.e("UNITTTTT","UNIT: $unit changingvggggggggg")
         return if (temp != null) {
             try {
                 val tempValue = temp.toDouble()
@@ -77,9 +79,10 @@ class WeatherAdapter(private val onItemClicked:(WeatherItem)->Unit, private var 
         }
     }
 
-    fun updateUnits(newTempUnit:String, newWindSpeedUnit:String){
-        temperatureUnit=newTempUnit
-        windSpeedUnit=newWindSpeedUnit
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateUnits(tempUnit:String, windSpeedUnit:String){
+        this.temperatureUnit=tempUnit
+        this.windSpeedUnit=windSpeedUnit
         notifyDataSetChanged()
     }
     private class WeatherDiffCallback : DiffUtil.ItemCallback<WeatherItem>() {
