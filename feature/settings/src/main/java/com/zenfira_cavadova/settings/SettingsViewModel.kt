@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -98,7 +99,7 @@ class SettingsViewModel @Inject constructor(
 
     fun schedulePeriodicWeatherUpdate(context: Context, enable:Boolean){
         val workManager=WorkManager.getInstance(context)
-        val periodicWorkRequest= PeriodicWorkRequestBuilder<UploadWorker>(24,TimeUnit.HOURS).build()
+        val periodicWorkRequest= PeriodicWorkRequestBuilder<UploadWorker>(1,TimeUnit.MINUTES).build()
 
         if (enable){
             workManager.enqueueUniquePeriodicWork(

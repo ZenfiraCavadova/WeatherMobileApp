@@ -2,16 +2,22 @@ package com.zenfira_cavadova.settings.workmanagers
 
 import android.content.Context
 import android.util.Log
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.zenfira_cavadova.core.NotificationHelper
+import com.zenfira_cavadova.domain.usecase.GetWeatherUseCase
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.delay
 
-class UploadWorker(context: Context, workerParams: WorkerParameters,
-) : CoroutineWorker(context, workerParams) {
+@HiltWorker
+class UploadWorker @AssistedInject constructor(context: Context,workerParams: WorkerParameters, private val getWeatherUseCase: GetWeatherUseCase)
+    : CoroutineWorker(context, workerParams) {
+//    @Inject lateinit
 
     override suspend fun doWork(): Result {
-        NotificationHelper.showNotification(applicationContext, "Weather Update", "Current weather")
+        val weatherData=getWeatherUseCase()
+        NotificationHelper.showNotification(applicationContext, "Weather Update", "Current weather: $weatherData")
         uploadImages()
         return Result.success()
     }

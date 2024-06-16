@@ -1,7 +1,6 @@
 package com.zenfira_cavadova.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,14 +31,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel,HomeState,Ho
 
         settingsViewModel = ViewModelProvider(requireActivity()).get(SettingsViewModel::class.java)
         settingsViewModel.setFragmentListener(this)
-//        adapter= WeatherAdapter(
-//            onItemClicked = {weatherItem ->
-//                val action=HomeFragmentDirections.actionHomeFragmentToDetailsNavGraph(weatherItem)
-//                findNavController().navigate(action)
-//            },
-//            temperatureUnit = "K",
-//            windSpeedUnit = "mph"
-//        )
         binding.searchInp.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (!query.isNullOrEmpty()){
@@ -57,18 +48,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeViewModel,HomeState,Ho
         })
         binding.weatherList.adapter=adapter
 
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            settingsViewModel.temperatureUnit.collect { unit ->
-//               updateUnits(unit, settingsViewModel.windSpeedUnit.value)
-//                Log.e("UNITTTTT","UNIT: $unit")
-//            }
-//        }
-
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            settingsViewModel.windSpeedUnit.collect { unit ->
-//                adapter?.updateUnits(settingsViewModel.temperatureUnit.value, unit)
-//            }
-//        }
         lifecycleScope.launch {
             settingsViewModel.temperatureUnit.value.let { unit ->
                 adapter = WeatherAdapter(

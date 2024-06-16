@@ -12,7 +12,7 @@ object NotificationHelper {
     fun showNotification(context: Context, title:String,message:String) {
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-//            .setSmallIcon(R.drawable.ic)
+            .setSmallIcon(R.drawable.ic_weather)
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)

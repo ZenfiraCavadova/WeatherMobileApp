@@ -1,5 +1,6 @@
 package com.zenfira_cavadova.home
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.zenfira_cavadova.core.BaseViewModel
@@ -25,7 +26,6 @@ class HomeViewModel @Inject constructor(
     private val addWeatherUseCase: AddWeatherUseCase
 )  : BaseViewModel<HomeState,HomeEffect,HomeEvent>() {
     private lateinit var settingsViewModel: SettingsViewModel
-//    private val weatherRepository = WeatherRepositoryImpl()
     private val _weatherItemsFlow= MutableStateFlow<List<WeatherItem>>(emptyList())
     val weatherItemsFlow: Flow<List<WeatherItem>> = _weatherItemsFlow
     private val weatherService: WeatherService by lazy { NetworkManager.getWeatherServiceInstance() }
